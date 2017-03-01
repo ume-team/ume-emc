@@ -19,6 +19,9 @@ TARGET_WEBSERVICE_SERVER: '"http://www.myservice.com/api"'
 npm run dev
 ```
 
+## Development Guide
+[开发手册](https://github.com/bluejfox/ume.js/blob/master/doc/GUIDE.md)
+
 ## Browser Support
 Modern browsers and Internet Explorer 9+.
 
