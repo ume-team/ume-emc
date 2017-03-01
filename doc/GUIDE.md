@@ -31,8 +31,10 @@
 
 ## 开发环境
 推荐使用[Sublime Text 3](https://www.sublimetext.com/3)进行开发。
-### [Sublime Text3的配置手册 - 未完成](#)
+
+    Sublime Text3的配置手册 - 未完成
 
 ## 编码规约
 [JavaScript Style Guide](https://github.com/airbnb/javascript)
+
     如上编码规约已在eslintrc.js中进行配置（使用支持ESLINT的IDE即可获得代码检查功能）
