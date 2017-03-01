@@ -38,6 +38,7 @@ Modern browsers and Internet Explorer 9+.
 ### 公共模块
 - [ ] 鉴权
 - [ ] 消息处理
+- [ ] UME服务调用
 - [ ] 用户状态管理
 - [ ] 菜单控件作成
 - [ ] 元数据列表控件作成
