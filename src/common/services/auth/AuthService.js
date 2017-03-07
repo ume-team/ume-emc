@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import util from '@/common/util';
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 export default class AuthService {
@@ -28,6 +29,10 @@ export default class AuthService {
   // logout() {
 
   // }
+
+  isLogin() {
+    return !util.isEmpty(this.authObj.token);
+  }
 
   getUserInfo() {
     return this.authObj.userInfo;

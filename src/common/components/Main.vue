@@ -10,19 +10,7 @@
     <div class="main-container">
       <el-row>
         <el-col :span="4">
-          <el-menu default-active="2" theme="dark" class="nav-menu" :router="true">
-            <template v-for="(menuItem, menuIndex) in menuArray">
-              <el-submenu v-if="menuItem.children" :index="menuIndex + ''">
-                <template slot="title">{{ menuItem.name }}</template>
-                <el-menu-item v-for="(menuChildItem, menuChildIndex) in menuItem.children" :index="menuChildItem.path">
-                  {{ menuChildItem.name }}
-                </el-menu-item>
-              </el-submenu>
-              <el-menu-item v-else :index="menuItem.path">
-                {{ menuItem.name }}
-              </el-menu-item>
-            </template>
-          </el-menu>
+          <ume-menu class="nav-menu" :data="menuData" :active-menu="activeMenu"></ume-menu>
         </el-col>
         <el-col :span="20">
           <div class="page-container page-component">
@@ -35,26 +23,7 @@
 </template>
 <script>
 import Util from '@/common/util';
-
-const menuData = [
-  {
-    name: '用户管理',
-    children: [
-      {
-        name: '用户列表',
-        path: '/entity/search/user',
-      },
-      {
-        name: '新增用户',
-        path: '/entity/create/user',
-      },
-    ],
-  },
-  {
-    name: '权限管理',
-    path: '/role/search',
-  },
-];
+import UmeMenu from '@/common/components/UMEMenu';
 
 export default {
   name: 'main',
@@ -62,9 +31,18 @@ export default {
     appTitle() {
       return Util.getConfigValue('APP_TITLE');
     },
-    menuArray() {
-      return menuData;
+    menuData() {
+      return this.$auth.getUserInfo().accResList;
     },
+    activeMenu() {
+      return this.$router.currentRoute.path;
+    },
+  },
+  components: {
+    UmeMenu,
+  },
+  created() {
+    console.log(this.$router.currentRoute.path);
   },
 };
 </script>
