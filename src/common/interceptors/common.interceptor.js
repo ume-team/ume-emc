@@ -1,4 +1,4 @@
-import { Loading, Message } from '@/common/services/ui';
+import UI from '@/common/services/ui';
 import Util from '@/common/util';
 
 /**
@@ -7,9 +7,9 @@ import Util from '@/common/util';
  */
 function toggleLoading(value) {
   if (value) {
-    Loading.service({ fullscreen: true });
+    UI.Loading.service({ fullscreen: true });
   } else {
-    Loading.service({ fullscreen: true }).close();
+    UI.Loading.service({ fullscreen: true }).close();
   }
 }
 
@@ -25,9 +25,11 @@ export default function (request, next) {
     toggleLoading(false);
     // 出现网络异常的场合
     if (!response.ok) {
-      Message({
+      UI.Notification({
         type: 'error',
+        title: '服务异常',
         message: '服务调用出现网络错误，无法调用指定服务，请检查网络',
+        duration: 3000,
       });
     }
   });

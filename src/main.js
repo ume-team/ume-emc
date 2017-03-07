@@ -7,7 +7,8 @@ import Vue from 'vue';
 import Http from 'vue-resource';
 
 import App from '@/App';
-import router from '@/router';
+import router from '@/common/router';
+import Auth from '@/common/services/auth';
 import CommonInterceptor from '@/common/interceptors/common.interceptor';
 import UMERequestInterceptor from '@/common/interceptors/ume.request.interceptor';
 import UMEResponseInterceptor from '@/common/interceptors/ume.response.interceptor';
@@ -18,13 +19,14 @@ Vue.config.productionTip = false;
 Vue.use(Element, { locale });
 // 加载Service模块(vue-resource)
 Vue.use(Http);
+// 加载鉴权模块
+Vue.use(Auth);
 Vue.http.interceptors.push(UMERequestInterceptor);
 Vue.http.interceptors.push(CommonInterceptor);
 Vue.http.interceptors.push(UMEResponseInterceptor);
-
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el: '#main',
   router,
   template: '<App/>',
   components: { App },

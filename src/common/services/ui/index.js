@@ -1,6 +1,8 @@
-import { Loading, Message } from 'element-ui';
+import { Loading, Notification } from 'element-ui';
 
-export default {
+const UI = {
   Loading,
-  Message,
+  Notification,
 };
+
+export default UI;
