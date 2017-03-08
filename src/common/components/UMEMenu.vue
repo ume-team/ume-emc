@@ -1,6 +1,6 @@
 <template>
   <el-menu default-active="2" theme="dark" :router="true" :default-active="activeMenu">
-    <ume-menu-item v-for="menuItem in menuData" :menuItemData="menuItem"></ume-menu-item>
+    <ume-menu-item v-for="menuItem in menuData" :key="menuItem.resIndex" :menuItemData="menuItem"></ume-menu-item>
   </el-menu>
 </template>
 

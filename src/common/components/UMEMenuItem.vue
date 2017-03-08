@@ -1,7 +1,7 @@
 <template>
   <el-submenu v-if="menuItemData.children" :index="menuItemData.index">
     <template slot="title">{{ menuItemData.name }}</template>
-    <ume-menu-item v-for="menuChildrenItem in menuItemData.children" :menuItemData="menuChildrenItem"></ume-menu-item>
+    <ume-menu-item v-for="menuChildrenItem in menuItemData.children" :key="menuChildrenItem.resIndex" :menuItemData="menuChildrenItem"></ume-menu-item>
   </el-submenu>
   <el-menu-item v-else-if="menuItemData" :index="menuItemData.index">
     {{ menuItemData.name }}

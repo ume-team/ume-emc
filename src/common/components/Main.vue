@@ -41,9 +41,6 @@ export default {
   components: {
     UmeMenu,
   },
-  created() {
-    console.log(this.$router.currentRoute.path);
-  },
 };
 </script>
 <style>
