@@ -4,11 +4,11 @@ var devEnvObj = require('./dev.env')
 var prodEnvObj = require('./prod.env')
 
 function getEnvConfig (key) {
-  let env = process.env.NODE_ENV === 'production' ? prodEnvObj : devEnvObj
+  var env = process.env.NODE_ENV === 'production' ? prodEnvObj : devEnvObj
   return env[key].replace(/"/g, '')
 }
 
-module.exports = {
+var config = {
   build: {
     env: prodEnvObj,
     index: path.resolve(__dirname, '../dist/index.html'),
@@ -34,15 +34,7 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      [getEnvConfig('PROXY_KEY')]: {
-        target: getEnvConfig('TARGET_WEBSERVICE_SERVER'),
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + getEnvConfig('PROXY_KEY')]: ''
-        }
-      }
-    },
+    proxyTable: {}, // cann't use es6 grammar, so define it in other ways
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
@@ -51,3 +43,13 @@ module.exports = {
     cssSourceMap: false
   }
 }
+
+var proxyKey = getEnvConfig('PROXY_KEY');
+var pathRegex = '^' + proxyKey;
+config.dev.proxyTable[proxyKey] = {
+  target: getEnvConfig('TARGET_WEBSERVICE_SERVER'),
+  changeOrigin: true
+}
+config.dev.proxyTable[proxyKey].pathRewrite = {};
+config.dev.proxyTable[proxyKey].pathRewrite[pathRegex] = '';
+module.exports = config;
