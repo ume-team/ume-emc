@@ -41,7 +41,4 @@
 
 ## 时序图
 ### 系统初始化
-<a href="#">
-  <img src="https://cdn.rawgit.com/bluejfox/ume.js/master/doc/imgs/SystemInitialSequence.svg" width="100%" height="144">
-</a>
 ![系统初始化](https://cdn.rawgit.com/bluejfox/ume.js/master/doc/imgs/SystemInitialSequence.svg "")
