@@ -4,27 +4,33 @@
     .
     ├── build/                      # webpack配置文件
     │   └── ...
-    ├── config/
-    │   ├── index.js                # 部署配置文件
+    ├── config/                     # 部署配置文件
+    │   ├── index.js
     │   └── ...
+    ├── dist/                       # 编译文件输出目录
     ├── src/
-    │   ├── main.js                 # 应用程序主入口文件（对第三方Library进行加载）
-    │   ├── App.vue                 # 应用程序主页面
-    │   ├── common/                 # 应用程序主页面
-    │   │   ├── components/         # 应用公共控件
-    │   │   ├── resource/           # 公共远程服务调用模块
-    │   │   │   └── interceptors/   # 远程服务调用钩子
-    │   │   ├── router/             # 公共路由模块
-    │   │   │   └── interceptors/   # 全局路由钩子
-    │   │   ├── services/           # 公共服务模块
-    │   │   └── util/               # 公共工具函数
-    │   ├── components/             # **画面开发目录**
-    │   │   ├── EntityCreate        # 元数据新增画面
-    │   │   ├── EntitySearch        # 元数据检索画面
-    │   │   ├── EntityUpdate        # 元数据修改画面
+    │   ├── component/              # 组件
+    │   │   ├── entity/             # 公共远程服务调用模块
+    │   │   │   ├── EntityCreate    # 元数据新增画面
+    │   │   │   ├── EntitySearch    # 元数据检索画面
+    │   │   │   └── EntityUpdate    # 元数据修改画面
+    │   │   ├── menu/               # 公共远程服务调用模块
+    │   │   │   ├── UmeMenu         # 菜单组件
+    │   │   │   └── UmeMenuItem     # 菜单子项目组件
     │   │   └── ...
-    │   └── assets/                 # 模块资源（由Webpack管理）
-    │       └── ...
+    │   ├── config/                 # 应用配置文件（路由定义，消息等）
+    │   ├── model/                  # 业务模型
+    │   │   ├── util/               # 公共函数模型
+    │   │   ├── auth                # 鉴权模型
+    │   │   └── ui                  # 通知相关组件模型
+    │   ├── resource/               # 公共远程服务调用模块
+    │   │   └── interceptors/       # 远程服务调用钩子
+    │   ├── router/                 # 公共路由模块
+    │   │   └── interceptors/       # 全局路由钩子
+    │   ├── assets/                 # 模块资源（由Webpack管理）
+    │   │   └── ...
+    │   ├── main.js                 # 应用程序主入口文件（对第三方Library进行加载）
+    │   └── App.vue                 # 应用程序主页面
     ├── static/                     # 静态资源
     ├── test/                       # 测试Case目录
     │   ├── unit/                   # 单体测试
