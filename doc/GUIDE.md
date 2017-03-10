@@ -41,4 +41,6 @@
 
 ## 时序图
 ### 系统初始化
-![系统初始化](/doc/imgs/SystemInitialSequence.svg?raw=true "")
+<a href="#">
+  <img src="/doc/imgs/SystemInitialSequence.svg?raw=true" width="100%" height="144">
+</a>
