@@ -47,6 +47,10 @@
 
     如上编码规约已在eslintrc.js中进行配置（使用支持ESLINT的IDE即可获得代码检查功能）
 
+``` bash
+1.可以被实例化的类必须使用大写字母开头。
+```
+
 ## 时序图
 ### 系统初始化
 ![系统初始化](https://cdn.rawgit.com/bluejfox/ume.js/master/doc/imgs/SystemInitialSequence.svg "")
