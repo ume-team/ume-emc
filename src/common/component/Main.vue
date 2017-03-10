@@ -23,7 +23,7 @@
 </template>
 <script>
 import Util from '@/common/util';
-import UmeMenu from '@/common/components/UMEMenu';
+import UmeMenu from '@/common/component/UMEMenu';
 
 export default {
   name: 'main',

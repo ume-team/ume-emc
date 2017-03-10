@@ -10,16 +10,24 @@
     ├── src/
     │   ├── main.js                 # 应用程序主入口文件（对第三方Library进行加载）
     │   ├── App.vue                 # 应用程序主页面
+    │   ├── common/                 # 应用程序主页面
+    │   │   ├── components/         # 应用公共控件
+    │   │   ├── resource/           # 公共远程服务调用模块
+    │   │   │   └── interceptors/   # 远程服务调用钩子
+    │   │   ├── router/             # 公共路由模块
+    │   │   │   └── interceptors/   # 全局路由钩子
+    │   │   ├── services/           # 公共服务模块
+    │   │   └── util/               # 公共工具函数
     │   ├── components/             # **画面开发目录**
-    │   │   └── EntityCreate        # 元数据新增画面
-    │   │   └── EntitySearch        # 元数据检索画面
-    │   │   └── EntityUpdate        # 元数据修改画面
+    │   │   ├── EntityCreate        # 元数据新增画面
+    │   │   ├── EntitySearch        # 元数据检索画面
+    │   │   ├── EntityUpdate        # 元数据修改画面
     │   │   └── ...
     │   └── assets/                 # 模块资源（由Webpack管理）
     │       └── ...
     ├── static/                     # 静态资源
     ├── test/                       # 测试Case目录
-    │   └── unit/                   # 单体测试
+    │   ├── unit/                   # 单体测试
     │   │   ├── specs/              # test spec files
     │   │   ├── index.js            # test build entry file
     │   │   └── karma.conf.js       # test runner config file

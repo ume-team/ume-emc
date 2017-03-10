@@ -1,4 +1,4 @@
-import UI from '../services/ui';
+import UI from '@/common/service/ui';
 
 function showServiceErrorNotification(errMessage, errDuration = 3000) {
   UI.Notification({

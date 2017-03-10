@@ -1,4 +1,4 @@
-import UI from '@/common/services/ui';
+import UI from '@/common/service/ui';
 import Util from '@/common/util';
 
 /**

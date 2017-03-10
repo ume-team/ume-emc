@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import config from '../../config';
+import config from '../../../config';
 
 
 function getConfigValue(key) {

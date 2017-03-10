@@ -1,7 +1,7 @@
-import Login from '@/common/components/Login';
-import Main from '@/common/components/Main';
-import EntitySearch from '@/components/EntitySearch';
-import EntityCreate from '@/components/EntityCreate';
+import Login from '@/common/component/Login';
+import Main from '@/common/component/Main';
+import EntitySearch from '@/component/EntitySearch';
+import EntityCreate from '@/component/EntityCreate';
 
 export default {
   routes: [

@@ -1,4 +1,4 @@
-import Auth from '@/common/services/auth/AuthService';
+import Auth from '@/common/service/auth/AuthService';
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 function install(Vue) {

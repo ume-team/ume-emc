@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import UmeMenuItem from '@/common/components/UMEMenuItem';
+import UmeMenuItem from '@/common/component/UMEMenuItem';
 import util from '@/common/util';
 
 const ENTITY_ADD_PREFIX = '新增';
