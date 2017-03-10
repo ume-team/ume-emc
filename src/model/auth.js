@@ -1,14 +1,12 @@
 import Vue from 'vue';
-import util from '@/common/util';
+import util from '@/model/util';
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
-export default class AuthService {
-  constructor() {
-    this.authObj = {
-      token: '',
-      userInfo: {},
-    };
-  }
+export default {
+  authObj: {
+    token: '',
+    userInfo: {},
+  },
 
   login(loginId, password) {
     return new Promise((resolve, reject) => {
@@ -24,29 +22,36 @@ export default class AuthService {
         reject(res);
       });
     });
-  }
+  },
 
-  // logout() {
-
-  // }
+  logout() {
+    return new Promise((resolve) => {
+      const userId = this.getUserInfo().user.userId;
+      Vue.http.post('EMWS00002', [userId]).then((res) => {
+        this.authObj.token = '';
+        this.authObj.userInfo = {};
+        resolve(res);
+      });
+    });
+  },
 
   isLogin() {
     return !util.isEmpty(this.authObj.token);
-  }
+  },
 
   getUserInfo() {
     return this.authObj.userInfo;
-  }
+  },
 
   getToken() {
     return this.authObj.token;
-  }
+  },
 
   // check() {
 
-  // }
+  // },
 
   // fetchUserInfo() {
 
-  // }
-}
+  // },
+};

@@ -6,16 +6,13 @@ import locale from 'element-ui/lib/locale/lang/zh-CN';
 import Vue from 'vue';
 
 import App from '@/App';
-import resource from '@/common/resource';
-import router from '@/common/router';
-import Auth from '@/common/service/auth';
+import resource from '@/resource';
+import router from '@/router';
 
 Vue.config.productionTip = false;
 
 // 使用中文语言加载Element UI
 Vue.use(Element, { locale });
-// 加载鉴权模块
-Vue.use(Auth);
 
 /* eslint-disable no-new */
 new Vue({

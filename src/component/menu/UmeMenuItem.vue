@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import UmeMenuItem from '@/common/component/UMEMenuItem';
+import UmeMenuItem from '@/component/menu/UmeMenuItem';
 
 export default {
   name: 'ume-menu-item',

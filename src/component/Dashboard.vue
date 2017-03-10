@@ -4,6 +4,14 @@
       <header class="header">
         <div class="container">
           <h2>{{ appTitle }}</h2>
+          <ul class="nav">
+            <li class="nav-item">
+              {{ userName }}
+            </li>
+            <li class="nav-item">
+              <el-button type="primary" size="large" class="login-button" @click="logout">注销</el-button>
+            </li>
+          </ul>
         </div>
       </header>
     </div>
@@ -22,20 +30,31 @@
   </div>
 </template>
 <script>
-import Util from '@/common/util';
-import UmeMenu from '@/common/component/UMEMenu';
+import util from '@/model/util';
+import auth from '@/model/auth';
+import UmeMenu from '@/component/menu/UmeMenu';
 
 export default {
   name: 'main',
   computed: {
     appTitle() {
-      return Util.getConfigValue('APP_TITLE');
+      return util.getConfigValue('APP_TITLE');
+    },
+    userName() {
+      return auth.getUserInfo().user.userName;
     },
     menuData() {
-      return this.$auth.getUserInfo().accResList;
+      return auth.getUserInfo().accResList;
     },
     activeMenu() {
       return this.$router.currentRoute.path;
+    },
+  },
+  methods: {
+    logout() {
+      auth.logout().then(() => {
+        this.$router.push({ name: 'Login' });
+      });
     },
   },
   components: {
@@ -70,6 +89,21 @@ export default {
     float: left;
     font-size: 24px;
     font-weight: 400;
+  }
+  .header .nav {
+    float: right;
+    height: 100%;
+    line-height: 60px;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+  }
+  .header .nav-item {
+    margin: 0;
+    float: left;
+    list-style: none;
+    position: relative;
+    margin-left: 20px;
   }
   .container, .page-container {
     width: 1140px;

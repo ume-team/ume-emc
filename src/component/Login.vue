@@ -18,7 +18,8 @@
 </template>
 
 <script>
-  import Util from '@/common/util';
+  import util from '@/model/util';
+  import auth from '@/model/auth';
 
   export default {
     data() {
@@ -44,14 +45,14 @@
     },
     computed: {
       appTitle() {
-        return Util.getConfigValue('APP_TITLE');
+        return util.getConfigValue('APP_TITLE');
       },
     },
     methods: {
       login() {
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            this.$auth.login(this.loginForm.loginId, this.loginForm.password).then(() => {
+            auth.login(this.loginForm.loginId, this.loginForm.password).then(() => {
               const path = this.$route.query.path || '/';
               this.$router.push({ path });
             });

@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import UmeMenuItem from '@/common/component/UMEMenuItem';
-import util from '@/common/util';
+import UmeMenuItem from '@/component/menu/UmeMenuItem';
+import util from '@/model/util';
 
 const ENTITY_ADD_PREFIX = '新增';
 const ENTITY_SEARCH_PREFIX = '查询';

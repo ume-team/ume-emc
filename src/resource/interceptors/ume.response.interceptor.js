@@ -1,7 +1,7 @@
-import UI from '@/common/service/ui';
+import ui from '@/model/ui';
 
 function showServiceErrorNotification(errMessage, errDuration = 3000) {
-  UI.Notification({
+  ui.Notification({
     type: 'error',
     title: '服务异常',
     message: errMessage,

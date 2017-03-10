@@ -1,31 +1,29 @@
-import Login from '@/common/component/Login';
-import Main from '@/common/component/Main';
-import EntitySearch from '@/component/EntitySearch';
-import EntityCreate from '@/component/EntityCreate';
+import Login from '@/component/Login';
+import Dashboard from '@/component/Dashboard';
+import EntitySearch from '@/component/entity/EntitySearch';
+import EntityCreate from '@/component/entity/EntityCreate';
 
 export default {
   routes: [
     {
       path: '/login',
       name: 'Login',
+      meta: { auth: false },
       component: Login,
     },
     {
       path: '/',
-      name: 'Main',
-      meta: { auth: true },
-      component: Main,
+      name: 'Dashboard',
+      component: Dashboard,
       children: [
         {
           path: '/entity/search/:id',
           name: 'EntitySearch',
-          meta: { auth: true },
           component: EntitySearch,
         },
         {
           path: '/entity/create/:id',
           name: 'EntityCreate',
-          meta: { auth: true },
           component: EntityCreate,
         },
       ],

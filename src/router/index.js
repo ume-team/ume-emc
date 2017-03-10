@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import routerConfig from '@/data/router';
+import routerConfig from '@/config/router';
 
-import AuthInterceptor from '@/common/router/interceptors/auth.interceptor';
+import AuthInterceptor from '@/router/interceptors/auth.interceptor';
 
 Vue.use(Router);
 
