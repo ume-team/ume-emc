@@ -3,5 +3,5 @@ module.exports = {
   PROXY_KEY: '"/api"',
   APP_TITLE: '"UME System"',
   TARGET_WEBSERVICE_SERVER: '"http://www.example.com"',
-  SERVICE_TIME_OUT: '1000'
+  SERVICE_TIME_OUT: '5000'
 }
