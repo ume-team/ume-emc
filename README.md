@@ -7,12 +7,12 @@
 
 1. NodeJS
 > 用于安装项目所需的第三方依赖包和在本地进行前端的开发与调试。
-[安装包下载地址](https://nodejs.org/zh-cn/download/)
-[安装说明](http://www.runoob.com/nodejs/nodejs-install-setup.html)
+  [安装包下载地址](https://nodejs.org/zh-cn/download/)
+  [安装说明](http://www.runoob.com/nodejs/nodejs-install-setup.html)
 
 2. Git
 > 版本管理工具。用于下载项目的代码和在开发时进行代码和文档的版本管理。
-[安装说明](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)
+  [安装说明](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)
 
 ## 安装步骤
 ``` bash
