@@ -22,6 +22,10 @@ function isEqual(value, other) {
   return _.isEqual(value, other);
 }
 
+function isNumber(value) {
+  return _.isNumber(value);
+}
+
 function cloneDeep(objects) {
   return _.cloneDeep(objects);
 }
@@ -30,6 +34,7 @@ export default {
   getConfigValue,
   getNow,
   isEmpty,
+  isNumber,
   isEqual,
   cloneDeep,
 };

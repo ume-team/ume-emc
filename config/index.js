@@ -1,11 +1,11 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
-var path = require('path')
-var devEnvObj = require('./dev.env')
-var prodEnvObj = require('./prod.env')
+var path = require('path');
+var devEnvObj = require('./dev.env');
+var prodEnvObj = require('./prod.env');
 
 function getEnvConfig (key) {
-  var env = process.env.NODE_ENV === 'production' ? prodEnvObj : devEnvObj
-  return env[key].replace(/"/g, '')
+  var env = process.env.NODE_ENV === 'production' ? prodEnvObj : devEnvObj;
+  return env[key].replace(/"/g, '');
 }
 
 var config = {
@@ -45,6 +45,7 @@ var config = {
   }
 }
 
+// only use in dev
 var proxyKey = getEnvConfig('PROXY_KEY');
 var pathRegex = '^' + proxyKey;
 config.dev.proxyTable[proxyKey] = {

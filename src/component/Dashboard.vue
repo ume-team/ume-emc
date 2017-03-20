@@ -2,17 +2,17 @@
   <div id="app">
     <div class="header-wrapper">
       <header class="header">
-        <div class="container">
-          <h2>{{ appTitle }}</h2>
-          <ul class="nav">
-            <li class="nav-item">
-              {{ userName }}
-            </li>
-            <li class="nav-item">
-              <el-button type="primary" size="large" class="login-button" @click="logout">注销</el-button>
-            </li>
-          </ul>
+        <div class="system-title">
+          {{ appTitle }}
         </div>
+        <ul class="nav">
+          <li class="nav-item">
+            {{ userName }}
+          </li>
+          <li class="nav-item">
+            <el-button type="primary" class="login-button" @click="logout">注销</el-button>
+          </li>
+        </ul>
       </header>
     </div>
     <div class="main-container">
@@ -79,19 +79,22 @@ export default {
     line-height: 60px;
     z-index: 100;
     position: relative;
-  }
-  .header .container {
+    width: 100%;
     height: 100%;
     box-sizing: border-box;
   }
-  .header h2 {
+  .system-title{
     margin: 0;
     float: left;
-    font-size: 24px;
-    font-weight: 400;
+    font-size: 18px;
+    font-weight: 900;
+    width: 240px;
+    text-align: left;
+    padding-left: 10px;
   }
   .header .nav {
     float: right;
+    width: 200px;
     height: 100%;
     line-height: 60px;
     background: transparent;
@@ -128,5 +131,12 @@ export default {
   .page-container {
     padding: 10px;
     background-color: #edeef2;
+    width: 100%;
+  }
+  .page-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #677375;
+    padding: 10px 2px;
   }
 </style>

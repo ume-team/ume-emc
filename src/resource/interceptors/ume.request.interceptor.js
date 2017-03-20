@@ -1,9 +1,12 @@
 import auth from '@/model/auth';
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
-export default function (request, next) {
-  request.url = `/api/${request.url}`;
+function successHandler(request) {
   // 设置Token
-  request.headers.set('TOKEN', auth.getToken());
-  next();
+  request.headers.TOKEN = auth.getToken();
+  return request;
 }
+
+export default [
+  successHandler,
+];

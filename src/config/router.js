@@ -2,6 +2,7 @@ import Login from '@/component/Login';
 import Dashboard from '@/component/Dashboard';
 import EntitySearch from '@/component/entity/EntitySearch';
 import EntityCreate from '@/component/entity/EntityCreate';
+import GenerateRoute from './generate_route';
 
 export default {
   routes: [
@@ -26,7 +27,7 @@ export default {
           name: 'EntityCreate',
           component: EntityCreate,
         },
-      ],
+      ].concat(GenerateRoute),
     },
   ],
 };

@@ -1,8 +1,13 @@
+// M[Message Catagory]XXX[Message Type]
+// Message Catagory:
+//   AM Application Message
+//   CM Common Message
+//   BM Bussiness Message
+// Message Type:
+//   E Error
+//   I Info
+//   W Warning
 const MESSAGE = {
-  SECM001E: '用户名或密码错误，请重新输入。',
-  SECM002E: '无法访问 {0} 网站',
-  SECM001I: '{0}成功更新。',
-  SECM002I: '查询的数据不存在。',
-  SECM001V: '没有可供提交的数据。',
+  MAM001E: '服务调用出现网络错误，无法调用指定服务，请检查网络。',
 };
 export default MESSAGE;

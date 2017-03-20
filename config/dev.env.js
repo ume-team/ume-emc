@@ -3,5 +3,6 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  TARGET_WEBSERVICE_SERVER: '"http://localhost:8080/em-spi/rs/s01/"',
+  PROXY_KEY: '"/em-spi/post/s01/"',
+  TARGET_WEBSERVICE_SERVER: '"http://localhost:8080/em-spi/post/s01/"',
 })
