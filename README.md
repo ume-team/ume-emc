@@ -53,8 +53,7 @@ npm run build
 
 ## 依赖包列表
 * [vue](https://github.com/vuejs/vue)
-* [vuex](https://github.com/vuejs/vuex)
-* [vue-resource](https://github.com/pagekit/vue-resource)
+* [axios](https://github.com/mzabriskie/axios)
 * [element-ui](https://github.com/ElemeFE/element) - A Vue.js 2.0 UI Toolkit for Web.
 
 ## 开发前需要掌握的知识
@@ -64,8 +63,8 @@ npm run build
 
 ### 公共模块
 - [X] 鉴权
-- [ ] 消息处理
-- [ ] UME服务调用
+- [X] 消息处理
+- [X] UME服务调用
 - [ ] 用户状态管理
 - [X] 菜单控件作成
 - [ ] 元数据列表控件作成

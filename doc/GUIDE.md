@@ -62,19 +62,22 @@
 ![系统初始化](https://cdn.rawgit.com/bluejfox/ume.js/master/doc/imgs/SystemInitialSequence.svg "")
 
 ## 公共组件
+
 公共组件：
 [Element.UI](http://element.eleme.io/#/zh-CN/component/layout)
+
 自定义组件：
 暂无
 
 ## 路由
+
 路由配置文件：config/router.js
 注：config/generate_route目录下的路由文件为自动生成而得，无非必要的情况下不允许修改。
 路由部分基于vue-router进行实现。
 [vue-router](https://router.vuejs.org/zh-cn/essentials/getting-started.html)
 
 ## 消息处理
-### model/Message类用于消息处理
+
 ``` JavaScript
 //可按如下方式使用Message类
 //1.在config/message.js文件中按照如下规则定义或使用消息
