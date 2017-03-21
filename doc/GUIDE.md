@@ -60,3 +60,41 @@
 ## 时序图
 ### 系统初始化
 ![系统初始化](https://cdn.rawgit.com/bluejfox/ume.js/master/doc/imgs/SystemInitialSequence.svg "")
+
+## 公共组件
+公共组件：
+[Element.UI](http://element.eleme.io/#/zh-CN/component/layout)
+自定义组件：
+暂无
+
+## 路由
+路由配置文件：config/router.js
+注：config/generate_route目录下的路由文件为自动生成而得，无非必要的情况下不允许修改。
+路由部分基于vue-router进行实现。
+[vue-router](https://router.vuejs.org/zh-cn/essentials/getting-started.html)
+
+## 消息处理
+### model/Message类用于消息处理
+``` JavaScript
+//可按如下方式使用Message类
+//1.在config/message.js文件中按照如下规则定义或使用消息
+// M[Message Catagory]XXX[Message Type]
+// Message Catagory:
+//   AM Application Message
+//   CM Common Message
+//   BM Bussiness Message
+// Message Type:
+//   E Error
+//   I Info
+//   W Warning
+//2.关键字可使用{数字}的方式进行定义。
+const MESSAGE = {
+  MCM001I: '{0}数据已成功新增。',
+  MCM002I: '{0}数据已成功修改。',
+  MCM003I: '{0}数据已成功删除。',
+};
+//3.在代码中通过实例化model/Message的方式取得指定的消息
+import Message from '@/model/Message';
+import ui from '@/model/ui';
+ui.UMEMessage.showMessage(new Message('MCM002I', ['用户']));
+```

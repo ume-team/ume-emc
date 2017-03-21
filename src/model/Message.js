@@ -1,6 +1,12 @@
 import umeMessage from '@/config/message';
 import util from '@/model/util';
 
+/**
+ * 格式化指定消息
+ * @param  {String} id     消息ID
+ * @param  {Array}  params 消息参数
+ * @return {String} 已格式化的消息
+ */
 function formatMessage(id, params) {
   let ret = util.isEmpty(umeMessage[id]) ? '' : umeMessage[id];
   if (!util.isEmpty(ret) && !util.isEmpty(params)) {
@@ -11,6 +17,11 @@ function formatMessage(id, params) {
   return ret;
 }
 
+/**
+ * 根据消息ID取得对应的消息类型
+ * @param  {String} id 消息ID
+ * @return {String} 消息类型
+ */
 function getMessageType(id) {
   let ret = '';
   const type = id.charAt(id.length - 1);

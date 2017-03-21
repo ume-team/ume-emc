@@ -8,6 +8,7 @@
   </div>
 </template>
 <script>
+import Message from '@/model/Message';
 import ui from '@/model/ui';
 import resource from '@/resource';
 import UserForm from './UserForm';
@@ -42,7 +43,7 @@ export default {
      */
     doSubmit() {
       resource.invoke('EMWS20001', ['Create', 'EM_USER', this.form]).then(() => {
-        ui.Message('数据已成功新增。');
+        ui.UMEMessage.showMessage(new Message('MCM001I', ['用户']));
         this.forwardToSearch();
       });
     },

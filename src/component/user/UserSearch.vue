@@ -53,6 +53,7 @@
   </div>
 </template>
 <script>
+import Message from '@/model/Message';
 import ui from '@/model/ui';
 import util from '@/model/util';
 import resource from '@/resource';
@@ -168,7 +169,7 @@ export default {
      * @param  {String} options.USER_ID 选择的用户ID
      */
     doDelete(index, { USER_ID }) {
-      ui.MessageBox.confirm('此操作将删除这条数据，是否继续？', '提示', {
+      ui.MessageBox.confirm(new Message('MCM004W').getMessage(), '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -176,8 +177,9 @@ export default {
         const param = {
           USER_ID,
         };
+        // 调用服务删除指定用户
         resource.invoke('EMWS20001', ['Delete', 'EM_USER', param]).then(() => {
-          ui.Message('数据已成功删除。');
+          ui.UMEMessage.showMessage(new Message('MCM003I', ['用户']));
         });
       });
     },

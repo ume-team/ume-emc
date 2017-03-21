@@ -1,4 +1,4 @@
-import { Notification } from 'element-ui';
+import { Message, Notification } from 'element-ui';
 
 /* eslint class-methods-use-this: ["error",
   { "exceptMethods": ["getTitleByMessageType"] }] */
@@ -27,16 +27,42 @@ class UMEMessage {
   }
 
   /**
-   * 显示消息
-   * @param  {String} options.type    消息类型
-   * @param  {String} options.message 消息内容
+   * 显示消息提示
+   * 主要用于主动操作后的反馈提示（譬如用户新增成功或删除成功等情况）
+   * @param  {String} options.type     消息类型
+   * @param  {String} options.message  消息内容
+   * @param  {Number} options.duration 显示时间, 毫秒。设为 0 则不会自动关闭
+   * @param  {[type]} options.onClose  关闭时的回调函数
+   * @return {Notification} Notification 实例 用于调用实例上的close函数关闭当前的Notification
    */
-  static show({ type = 'error', message = '' }) {
+  static showMessage({ type = 'error', message = '' },
+    { duration = 3000, onClose = null } = {}) {
+    Message({
+      type,
+      title: UMEMessage.getTitleByMessageType(type),
+      message,
+      duration,
+      onClose,
+    });
+  }
+
+  /**
+   * 显示通知
+   * 主要用于系统级通知的被动提醒（譬如服务调用出现异常等情况）
+   * @param  {String} options.type     消息类型
+   * @param  {String} options.message  消息内容
+   * @param  {Number} options.duration 显示时间, 毫秒。设为 0 则不会自动关闭
+   * @param  {[type]} options.onClose  关闭时的回调函数
+   * @return {Notification} Notification 实例 用于调用实例上的close函数关闭当前的Notification
+   */
+  static showNotify({ type = 'error', message = '' },
+    { duration = 3000, onClose = null } = {}) {
     Notification({
       type,
       title: UMEMessage.getTitleByMessageType(type),
       message,
-      duration: 3000,
+      duration,
+      onClose,
     });
   }
 }

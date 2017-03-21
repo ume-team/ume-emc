@@ -62,10 +62,7 @@ function isSessionTimeout(errors) {
 function doSessionTimeout() {
   const WAIT_TIME = 3;
   // 使用系统通知的方式显示错误信息
-  ui.Notification({
-    title: '错误',
-    message: new Message('MAM002E', [WAIT_TIME]).getMessage(),
-    type: 'error',
+  ui.UMEMessage.showNotify(new Message('MAM002E', [WAIT_TIME]), {
     duration: WAIT_TIME * 1000,
     onClose: () => {
       const path = router.currentRoute.path;
@@ -87,7 +84,7 @@ function doError(errors) {
     // Element.UI的BUG，显示的消息同步连续调用会出现消息重叠现象
     errors.forEach((err) => {
       setTimeout(() => {
-        ui.UMEMessage.show(err);
+        ui.UMEMessage.showNotify(err);
       }, 0);
     });
   }
