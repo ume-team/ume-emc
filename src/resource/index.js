@@ -4,12 +4,14 @@
  * @author HanL
  */
 import axios from 'axios';
+import Message from '@/model/Message';
 import ui from '@/model/ui';
 import util from '@/model/util';
 import CommonRequestInterceptor from '@/resource/interceptors/common.request.interceptor';
 import CommonResponseInterceptor from '@/resource/interceptors/common.response.interceptor';
 import UMERequestInterceptor from '@/resource/interceptors/ume.request.interceptor';
 import UMEResponseInterceptor from '@/resource/interceptors/ume.response.interceptor';
+import router from '@/router';
 
 // 创建实例
 const axiosInstance = axios.create({
@@ -27,6 +29,10 @@ function toggleLoading(isShowLoading) {
   } else {
     ui.Loading.service({ fullscreen: true }).close();
   }
+}
+
+function isSessionTimeout(errors) {
+  return errors.some(item => item.id === 'SEMSG-AUTH-FAIL');
 }
 
 const resource = {
@@ -71,12 +77,28 @@ const resource = {
         }
         // 显示错误信息
         if (umeConfig.isShowError !== false && !util.isEmpty(errors)) {
-          // Element.UI的BUG，显示的消息同步连续调用会出现消息重叠现象
-          errors.forEach((err) => {
-            setTimeout(() => {
-              ui.UMEMessage.show(err);
-            }, 0);
-          });
+          // Session过期的场合
+          if (isSessionTimeout(errors)) {
+            const WAIT_TIME = 3;
+            // 使用系统通知的方式显示错误信息
+            ui.Notification({
+              title: '错误',
+              message: new Message('MAM002E', [WAIT_TIME]).getMessage(),
+              type: 'error',
+              duration: WAIT_TIME * 1000,
+              onClose: () => {
+                const path = router.currentRoute.path;
+                router.push({ name: 'Login', query: { path } });
+              },
+            });
+          } else {
+            // Element.UI的BUG，显示的消息同步连续调用会出现消息重叠现象
+            errors.forEach((err) => {
+              setTimeout(() => {
+                ui.UMEMessage.show(err);
+              }, 0);
+            });
+          }
         }
         reject(errors);
       });
