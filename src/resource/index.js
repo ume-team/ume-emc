@@ -133,13 +133,13 @@ const resource = {
 };
 
 // 加载拦截器
-// 公共请求数据处理拦截器
+// 远程服务请求公共处理拦截器
 axiosInstance.interceptors.request.use(...CommonRequestInterceptor);
-// 公共返回数据处理拦截器
+// 远程服务返回公共处理拦截器
 axiosInstance.interceptors.response.use(...CommonResponseInterceptor);
-// UME服务调用请求数据处理拦截器
+// UME服务请求处理拦截器
 axiosInstance.interceptors.request.use(...UMERequestInterceptor);
-// UME服务调用返回数据处理拦截器
+// UME服务返回处理拦截器
 axiosInstance.interceptors.response.use(...UMEResponseInterceptor);
 
 export default resource;
