@@ -19,6 +19,22 @@ const axiosInstance = axios.create({
   timeout: util.getConfigValue('SERVICE_TIME_OUT'),
 });
 
+function createUmeServiceRequestConfig(serviceId, serviceParam, config) {
+  const umeConfig = config;
+  // Url
+  umeConfig.url = serviceId;
+  // 默认使用POST
+  umeConfig.method = util.isEmpty(umeConfig.method) ? 'post' : umeConfig.method;
+  // method为POST, PUT, DELETE, PATCH场合
+  if (umeConfig.method.toLowerCase() !== 'get') {
+    umeConfig.data = serviceParam;
+  // GET的场合，使用params
+  } else {
+    umeConfig.params = serviceParam;
+  }
+  return umeConfig;
+}
+
 /**
  * 显示／隐藏Loading
  * @param  {Boolean} isShowLoading true的场合，显示Loading
@@ -31,12 +47,17 @@ function toggleLoading(isShowLoading) {
   }
 }
 
+/**
+ * 判断是否为远程登录超时
+ * @param  {Array}   errors 错误消息列表
+ * @return {Boolean} 远程登录超时的场合，返回true
+ */
 function isSessionTimeout(errors) {
   return errors.some(item => item.id === 'SEMSG-AUTH-FAIL');
 }
 
 /**
- * 远程服务登录超时处理
+ * 远程服务登录超时的处理
  */
 function doSessionTimeout() {
   const WAIT_TIME = 3;
@@ -53,6 +74,25 @@ function doSessionTimeout() {
   });
 }
 
+/**
+ * 远程服务返回错误时的处理
+ * @param {Array} errors 错误消息列表
+ */
+function doError(errors) {
+  // Session过期的场合
+  if (isSessionTimeout(errors)) {
+    doSessionTimeout();
+  // 其它的场合
+  } else {
+    // Element.UI的BUG，显示的消息同步连续调用会出现消息重叠现象
+    errors.forEach((err) => {
+      setTimeout(() => {
+        ui.UMEMessage.show(err);
+      }, 0);
+    });
+  }
+}
+
 const resource = {
   /**
    * 执行指定服务
@@ -62,21 +102,10 @@ const resource = {
    * @return {Promise} Promise
    */
   invoke(serviceId, serviceParam = [], config = {}) {
-    const umeConfig = config;
+    const umeConfig = createUmeServiceRequestConfig(serviceId, serviceParam, config);
     // 显示Loading
     if (config.isShowLoading !== false) {
       toggleLoading(true);
-    }
-    // Url
-    umeConfig.url = serviceId;
-    // 默认使用POST
-    umeConfig.method = util.isEmpty(umeConfig.method) ? 'post' : umeConfig.method;
-    // method为POST, PUT, DELETE, PATCH场合
-    if (umeConfig.method.toLowerCase() !== 'get') {
-      umeConfig.data = serviceParam;
-    // GET的场合，使用params
-    } else {
-      umeConfig.params = serviceParam;
     }
 
     return new Promise((resolve, reject) => {
@@ -95,18 +124,7 @@ const resource = {
         }
         // 显示错误信息
         if (umeConfig.isShowError !== false && !util.isEmpty(errors)) {
-          // Session过期的场合
-          if (isSessionTimeout(errors)) {
-            doSessionTimeout();
-          // 其它的场合
-          } else {
-            // Element.UI的BUG，显示的消息同步连续调用会出现消息重叠现象
-            errors.forEach((err) => {
-              setTimeout(() => {
-                ui.UMEMessage.show(err);
-              }, 0);
-            });
-          }
+          doError(errors);
         }
         reject(errors);
       });
