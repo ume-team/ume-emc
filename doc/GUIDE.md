@@ -73,13 +73,12 @@
 
 路由配置文件：config/router.js
 ``` bash
-config/generate_route目录下的路由文件为自动生成而得，无非必要的情况下不允许修改。
+强调：config/generate_route目录下的路由文件为自动生成而得，无非必要的情况下不允许修改。
 ```
 
-路由部分基于vue-router进行实现。
-``` bash
-[vue-router](https://router.vuejs.org/zh-cn/essentials/getting-started.html)
-```
+路由部分基于[vue-router](https://router.vuejs.org/zh-cn/essentials/getting-started.html)进行实现。
+
+
 
 ## 消息处理
 
