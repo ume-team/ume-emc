@@ -35,6 +35,24 @@ function isSessionTimeout(errors) {
   return errors.some(item => item.id === 'SEMSG-AUTH-FAIL');
 }
 
+/**
+ * 远程服务登录超时处理
+ */
+function doSessionTimeout() {
+  const WAIT_TIME = 3;
+  // 使用系统通知的方式显示错误信息
+  ui.Notification({
+    title: '错误',
+    message: new Message('MAM002E', [WAIT_TIME]).getMessage(),
+    type: 'error',
+    duration: WAIT_TIME * 1000,
+    onClose: () => {
+      const path = router.currentRoute.path;
+      router.push({ name: 'Login', query: { path } });
+    },
+  });
+}
+
 const resource = {
   /**
    * 执行指定服务
@@ -79,18 +97,8 @@ const resource = {
         if (umeConfig.isShowError !== false && !util.isEmpty(errors)) {
           // Session过期的场合
           if (isSessionTimeout(errors)) {
-            const WAIT_TIME = 3;
-            // 使用系统通知的方式显示错误信息
-            ui.Notification({
-              title: '错误',
-              message: new Message('MAM002E', [WAIT_TIME]).getMessage(),
-              type: 'error',
-              duration: WAIT_TIME * 1000,
-              onClose: () => {
-                const path = router.currentRoute.path;
-                router.push({ name: 'Login', query: { path } });
-              },
-            });
+            doSessionTimeout();
+          // 其它的场合
           } else {
             // Element.UI的BUG，显示的消息同步连续调用会出现消息重叠现象
             errors.forEach((err) => {
