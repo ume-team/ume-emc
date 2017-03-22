@@ -105,3 +105,49 @@ import Message from '@/model/Message';
 import ui from '@/model/ui';
 ui.UMEMessage.showMessage(new Message('MCM002I', ['用户']));
 ```
+
+## 模版生成
+UME系统可基于指定格式的Excel文件进行画面模版的生成，用于提高开发效率和进行定制化开发。
+生成的文件主要有两种：
+1. 画面Vue文件。
+> 位于component/下，一个资源下的画面文件放置于同一目录中。
+``` JavaScript
+// 譬如对于用户资源，主要生成4个Vue文件。
+// 创建用户组件
+component/user/UserCreate.vue
+// 用户表单组件
+component/user/UserForm.vue
+// 用户查询组件（包含用户删除操作）
+component/user/UserSearch.vue
+// 用户修改组件
+component/user/UserUpdate.vue
+```
+2. 路由定义。
+> 1.中定义的资源组件的路由定义位于config/generate_route下的一个单独文件内。
+``` JavaScript
+// 譬如同样拿用户资源来举例，在config/generate_route下会生成user.js文件。
+// user.js
+import UserCreate from '@/component/user/UserCreate';
+import UserUpdate from '@/component/user/UserUpdate';
+import UserSearch from '@/component/user/UserSearch';
+
+const USER_ROUTE = [
+  {
+    path: '/user/create',
+    name: 'UserCreate',
+    component: UserCreate,
+  },
+  {
+    path: '/user/update/:USER_ID',
+    name: 'UserUpdate',
+    component: UserUpdate,
+  },
+  {
+    path: '/user/search/:USER_ID?',
+    name: 'UserSearch',
+    component: UserSearch,
+  },
+];
+
+export default USER_ROUTE;
+```
