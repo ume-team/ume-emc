@@ -126,8 +126,8 @@ component/user/UserUpdate.vue
 > 1.中定义的资源组件的路由定义位于config/generate_route下的一个单独文件内。
 > 并由config/generate_route/index.js引用
 ``` JavaScript
-// 仍然拿用户资源来举例，在config/generate_route下会生成user.js文件。
-// index.js
+// 仍然拿用户资源来举例
+// config/generate_route/index.js
 import user from './user';
 
 const generateRoute = {
@@ -139,7 +139,7 @@ generateRoute.route = generateRoute.route.concat(user);
 export default generateRoute.route;
 ```
 ``` JavaScript
-// user.js
+// config/generate_route/user.js
 import UserCreate from '@/component/user/UserCreate';
 import UserUpdate from '@/component/user/UserUpdate';
 import UserSearch from '@/component/user/UserSearch';
