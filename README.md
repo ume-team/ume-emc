@@ -11,6 +11,13 @@
   [安装包下载地址](https://nodejs.org/zh-cn/download/)
   [安装说明](http://www.runoob.com/nodejs/nodejs-install-setup.html)
 
+``` bash
+1.使用国内镜像
+npm config set registry https://registry.npm.taobao.org
+// 配置后可通过下面方式来验证是否成功
+npm config get registry
+```
+
 2. Git
 > 版本管理工具。用于下载项目的代码和在开发时进行代码和文档的版本管理。
 
