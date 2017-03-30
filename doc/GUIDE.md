@@ -114,7 +114,8 @@
     }
   }
 
-  重启Sublime Text后新建一个js文件并输入如下并保存。如果提示Unexpected var, use let or const instead(no-var)，则证明ESLint配置成功。
+  重启Sublime Text后新建一个js文件并输入如下并保存。
+  如果提示Unexpected var, use let or const instead(no-var)，则证明ESLint配置成功。
 
   var i = 0;
 
