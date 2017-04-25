@@ -12,7 +12,7 @@
   </el-table>
 </template>
 <script>
-import util from '@/model/util';
+import Util from '@/model/Util';
 
 const DEFAULT_COLUMN_WIDTH = 150;
 
@@ -22,10 +22,10 @@ function createTableHeader({ colCfgMap = {}, hideColSet = [],
   Object.entries(colCfgMap).forEach(([k, v]) => {
     const colItem = v;
     if (!hideColSet.includes(k) && !disableColSet.includes(k)) {
-      const colDispCfg = !util.isEmpty(columnDispConfig[k]) ?
+      const colDispCfg = !Util.isEmpty(columnDispConfig[k]) ?
         columnDispConfig[k] : {};
       // 设置列的宽度
-      colItem.$width = util.isNumber(colDispCfg.width) ?
+      colItem.$width = Util.isNumber(colDispCfg.width) ?
         colDispCfg.width : DEFAULT_COLUMN_WIDTH;
       ret.push(v);
     }

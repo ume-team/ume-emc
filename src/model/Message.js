@@ -1,5 +1,12 @@
-import umeMessage from '@/config/message';
-import util from '@/model/util';
+import MessageConfig from '@/config/message';
+import Util from '@/model/Util';
+
+export const MESSAGE_TYPE = {
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  INFO: 'info',
+  ERROR: 'error',
+};
 
 /**
  * 格式化指定消息
@@ -8,8 +15,8 @@ import util from '@/model/util';
  * @return {String} 已格式化的消息
  */
 function formatMessage(id, params) {
-  let ret = util.isEmpty(umeMessage[id]) ? '' : umeMessage[id];
-  if (!util.isEmpty(ret) && !util.isEmpty(params)) {
+  let ret = Util.isEmpty(MessageConfig[id]) ? '' : MessageConfig[id];
+  if (!Util.isEmpty(ret) && !Util.isEmpty(params)) {
     params.forEach((item, index) => {
       ret = ret.split(`{${index}}`).join(params[index]);
     });
@@ -24,7 +31,7 @@ function formatMessage(id, params) {
  */
 function getMessageType(id) {
   let ret = '';
-  const type = id.charAt(id.length - 1);
+  const type = id !== null ? id.charAt(id.length - 1) : '';
   switch (type) {
     case 'E':
       ret = 'error';
@@ -41,13 +48,13 @@ function getMessageType(id) {
   return ret;
 }
 
-export default class {
+export default class Message {
   constructor(id, params, message) {
     this.id = id;
     this.type = getMessageType(id);
     this.params = params;
     this.message = formatMessage(this.id, this.params);
-    if (util.isEmpty(this.message) && !util.isEmpty(message)) {
+    if (Util.isEmpty(this.message) && !Util.isEmpty(message)) {
       this.message = message;
     }
   }

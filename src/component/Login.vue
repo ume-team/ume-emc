@@ -1,67 +1,87 @@
 <template>
-  <el-row type="flex" justify="center" align="middle" class="login-container">
-    <el-col :span="7" class="login-form">
+  <ume-row type="flex" justify="center" align="middle" class="login-container">
+    <ume-col :span="7" class="login-form">
       <div class="login-system-title">{{ appTitle }}</div>
-      <el-form :model="loginForm" :rules="rules" ref="loginForm">
-        <el-form-item prop="loginId">
-          <el-input v-model="loginForm.loginId" placeholder="登录名" autofocus></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input type="password" v-model="loginForm.password" placeholder="登录密码"></el-input>
-        </el-form-item>
-        <el-form-item class="login-button-container">
-          <el-button type="primary" size="large" class="login-button" native-type="submit" @click="login">登录</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-  </el-row>
+      <ume-form :model="loginForm" :rules="loginFormRule" ref="loginForm" @submit="doSubmit">
+        <ume-form-item prop="loginId">
+          <ume-input v-model="loginForm.loginId" placeholder="登录名" autofocus></ume-input>
+        </ume-form-item>
+        <ume-form-item prop="password">
+          <ume-input type="password" v-model="loginForm.password" placeholder="登录密码"></ume-input>
+        </ume-form-item>
+        <ume-form-item class="login-button-container">
+          <ume-button type="primary" class="login-button" native-type="submit">登录</ume-button>
+        </ume-form-item>
+      </ume-form>
+    </ume-col>
+  </ume-row>
 </template>
 
 <script>
-import util from '@/model/util';
-import auth from '@/model/auth';
+  import UI from '@/component/ui';
+  import loginFormRule from '@/model/rule/LoginFormRule';
+  import Auth from '@/model/Auth';
+  import Util from '@/model/Util';
 
-export default {
-  data() {
-    return {
-      fromRouter: {},
-      rules: {
-        loginId: {
-          required: true,
-          message: '请输入用户名',
-          trigger: 'blur',
+  export default {
+    /**
+     * 组件名称
+     * @type {String}
+     */
+    name: 'Login',
+    /**
+     * 数据绑定对象
+     */
+    data() {
+      return {
+        // 前画面路由对象
+        fromRouter: {},
+        // 登录表单项目校验规则
+        loginFormRule,
+        // 登录表单对象
+        loginForm: {
+          loginId: '',
+          password: '',
         },
-        password: {
-          required: true,
-          message: '请输入密码',
-          trigger: 'blur',
-        },
-      },
-      loginForm: {
-        loginId: '',
-        password: '',
-      },
-    };
-  },
-  computed: {
-    appTitle() {
-      return util.getConfigValue('APP_TITLE');
+      };
     },
-  },
-  methods: {
-    login() {
-      this.$refs.loginForm.validate((valid) => {
-        if (valid) {
-          auth.login(this.loginForm.loginId, this.loginForm.password)
-            .then(() => {
-              const path = this.$route.query.path || '/';
-              this.$router.push({ path });
-            });
-        }
-      });
+    /**
+     * 计算属性
+     * @type {Object}
+     */
+    computed: {
+      /**
+       * 系统标题
+       * @return {String}
+       */
+      appTitle() {
+        return Util.getConfigValue('APP_TITLE');
+      },
     },
-  },
-};
+    /**
+     * 组件事件处理函数
+     * @type {Object}
+     */
+    methods: {
+      /**
+       * 登录按钮点击事件处理
+       * @event
+       */
+      doSubmit() {
+        UI.LoadingIndicator.show();
+        Auth.login(this.loginForm.loginId, this.loginForm.password)
+          .then(() => {
+            UI.LoadingIndicator.hide();
+            const path = this.$route.query.path || '/';
+            this.$router.push({ path });
+          })
+          .catch((error) => {
+            UI.LoadingIndicator.hide();
+            this.$root.handleError(error);
+          });
+      },
+    },
+  };
 </script>
 
 <style scoped>
@@ -83,6 +103,7 @@ export default {
     border-radius: 10px;
   }
   .login-button-container {
+    margin-top: 20px;
     text-align: center;
   }
   .login-button {

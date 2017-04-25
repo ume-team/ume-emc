@@ -10,57 +10,97 @@
             {{ userName }}
           </li>
           <li class="nav-item">
-            <el-button type="primary" class="login-button" @click="logout">注销</el-button>
+            <ume-button type="primary" class="login-button" @click="doLogout">注销</ume-button>
           </li>
         </ul>
       </header>
     </div>
     <div class="main-container">
-      <el-row>
-        <el-col :span="4">
-          <ume-menu class="nav-menu" :data="menuData" :active-menu="activeMenu"></ume-menu>
-        </el-col>
-        <el-col :span="20">
-          <div class="page-container page-component">
-            <router-view></router-view>
-          </div>
-        </el-col>
-      </el-row>
+      <ume-row>
+        <ume-col :span="4" class="nav-menu-container">
+          <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu"></system-menu>
+        </ume-col>
+        <ume-col :span="20" class="page-container">
+          <router-view></router-view>
+        </ume-col>
+      </ume-row>
     </div>
   </div>
 </template>
 <script>
-import util from '@/model/util';
-import auth from '@/model/auth';
-import UmeMenu from '@/component/menu/UmeMenu';
+  import Auth from '@/model/Auth';
+  import Util from '@/model/Util';
+  import SystemMenu from '@/component/menu/SystemMenu';
 
-export default {
-  name: 'main',
-  computed: {
-    appTitle() {
-      return util.getConfigValue('APP_TITLE');
+  export default {
+    // 组件名称
+    name: 'Dashboard',
+    /**
+     * 计算属性
+     * @type {Object}
+     */
+    computed: {
+      /**
+       * 系统标题
+       * @return {String}
+       */
+      appTitle() {
+        return Util.getConfigValue('APP_TITLE');
+      },
+      /**
+       * 用户名称
+       * @return {String}
+       */
+      userName() {
+        return Auth.getUserInfo().user.userName;
+      },
+      /**
+       * 菜单数据
+       * @return {String}
+       */
+      accResList() {
+        return Auth.getUserInfo().accResList;
+      },
+      /**
+       * 当前使用的菜单项
+       * @return {String}
+       */
+      activeMenu() {
+        return this.$router.currentRoute.path;
+      },
     },
-    userName() {
-      return auth.getUserInfo().user.userName;
-    },
-    menuData() {
-      return auth.getUserInfo().accResList;
-    },
-    activeMenu() {
-      return this.$router.currentRoute.path;
-    },
-  },
-  methods: {
-    logout() {
-      auth.logout().then(() => {
+    /**
+     * 组件事件处理函数
+     * @type {Object}
+     */
+    methods: {
+      /**
+       * 注销按钮点击事件处理
+       * @event
+       */
+      doLogout() {
+        // 调用登出服务
+        Auth.logout().then(() => {
+          this.forwardToLogin();
+        }).catch(() => {
+          this.forwardToLogin();
+        });
+      },
+      /**
+       * 跳转至登录页面
+       */
+      forwardToLogin() {
         this.$router.push({ name: 'Login' });
-      });
+      },
     },
-  },
-  components: {
-    UmeMenu,
-  },
-};
+    /**
+     * 使用的子组件列表
+     * @type {Object}
+     */
+    components: {
+      SystemMenu,
+    },
+  };
 </script>
 <style>
   #app {
@@ -86,7 +126,7 @@ export default {
   .system-title{
     margin: 0;
     float: left;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 900;
     width: 240px;
     text-align: left;
@@ -108,30 +148,30 @@ export default {
     position: relative;
     margin-left: 20px;
   }
-  .container, .page-container {
-    width: 1140px;
-    margin: 0 auto;
-  }
   .main-container {
+    width: 100%;
     margin-top: -60px;
     padding: 60px 0 0;
     box-sizing: border-box;
     min-height: 100%;
     height: 100%;
   }
-  .main-container .el-row,
-  .main-container .el-row .el-col,
+  .main-container .page-container {
+    padding: 10px;
+    background-color: #edeef2;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .main-container > .el-row,
+  .main-container > .el-row > .el-col,
   .main-container .nav-menu,
   .page-container {
     height: 100%;
   }
-  .page-component {
-    box-sizing: border-box;
-  }
-  .page-container {
-    padding: 10px;
-    background-color: #edeef2;
-    width: 100%;
+  .main-container .nav-menu-container {
+    overflow-x: none;
+    overflow-y: auto;
+    height: 100%;
   }
   .page-title {
     font-size: 18px;

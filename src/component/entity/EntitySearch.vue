@@ -16,23 +16,23 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.doFetch();
   },
   watch: {
-    $route: 'fetchData',
+    $route: 'doFetch',
   },
   methods: {
-    fetchData() {
+    doFetch() {
       const entityID = this.$route.params.id;
-      this.$http.post('EMWS10001', [entityID]).then((res) => {
-        this.entityDesc = res.body;
-        return this.$http.post('EMWS10002', [entityID]);
+      this.$root.callService('EMS10001', [entityID]).then((res) => {
+        this.entityDesc = res;
+        return this.$root.callService('EMS10002', [entityID]);
       }).then((res) => {
-        this.entityConstraint = res.body;
-        return this.$http.post('EMWS20001', ['Retrieve', entityID,
+        this.entityConstraint = res;
+        return this.$root.callService('EMS20001', ['Retrieve', entityID,
         { theOrderByCondition: 'USER_ID desc', theFetchStart: 0, theFetchSize: 10 }]);
       }).then((res) => {
-        this.entityData = res.body;
+        this.entityData = res;
       });
     },
   },

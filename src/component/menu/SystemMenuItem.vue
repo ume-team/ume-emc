@@ -1,7 +1,7 @@
 <template>
   <el-submenu v-if="menuItemData.children" :index="menuItemData.index">
     <template slot="title">{{ menuItemData.name }}</template>
-    <ume-menu-item v-for="menuChildrenItem in menuItemData.children" :key="menuChildrenItem.resIndex" :menuItemData="menuChildrenItem"></ume-menu-item>
+    <system-menu-item v-for="menuChildrenItem in menuItemData.children" :key="menuChildrenItem.resIndex" :menuItemData="menuChildrenItem"></system-menu-item>
   </el-submenu>
   <el-menu-item v-else-if="menuItemData" :index="menuItemData.index">
     {{ menuItemData.name }}
@@ -9,15 +9,15 @@
 </template>
 
 <script>
-import UmeMenuItem from '@/component/menu/UmeMenuItem';
+import SystemMenuItem from '@/component/menu/SystemMenuItem';
 
 export default {
-  name: 'ume-menu-item',
+  name: 'SystemMenuItem',
   props: {
     menuItemData: Object,
   },
   components: {
-    UmeMenuItem,
+    SystemMenuItem,
   },
 };
 </script>
