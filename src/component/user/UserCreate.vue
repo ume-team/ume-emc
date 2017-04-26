@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="page-title">新增用户</div>
-    <el-card class="box-card">
-      <user-form :data="form" @submit="doSubmit" @cancel="doCancel">
+    <ume-card class="box-card">
+      <user-form :data="emUserDTO" @submit="doSubmit" @cancel="doCancel">
       </user-form>
-    </el-card>
+    </ume-card>
   </div>
 </template>
 <script>
+import { Notice } from '@/component/ui';
+import EmUserDTO from '@/model/dto/EmUserDTO';
 import Message from '@/model/Message';
-import ui from '@/model/ui';
-import resource from '@/resource';
 import UserForm from './UserForm';
 
 export default {
@@ -19,18 +19,7 @@ export default {
    */
   data() {
     return {
-      form: {
-        USER_ID: '',
-        USER_NAME: '',
-        USER_INTEREST: [],
-        USER_MOBILE: '',
-        USER_SEX: '1',
-        USER_IDENTITY_CARD: '',
-        USER_LOCATION_PROVINCE: '004',
-        USER_BIRTHDAY: '',
-        USER_ADDRESS: '',
-        USER_EMAIL: '',
-      },
+      emUserDTO: new EmUserDTO(),
     };
   },
   /**
@@ -42,8 +31,11 @@ export default {
      * 提交表单数据
      */
     doSubmit() {
-      resource.invoke('EMWS20001', ['Create', 'EM_USER', this.form]).then(() => {
-        ui.UMEMessage.showMessage(new Message('MCM001I', ['用户']));
+      this.$root.callService('EMS20001', ['Create', 'EM_USER', this.form]).then(() => {
+        const message = new Message('MCM001I', ['用户']);
+        Notice.showMessage({
+          message,
+        });
         this.forwardToSearch();
       });
     },

@@ -1,16 +1,15 @@
 <template>
   <div>
     <div class="page-title">修改用户</div>
-    <el-card class="box-card">
+    <ume-card class="box-card">
       <user-form :data="form" @submit="doSubmit" @cancel="doCancel">
       </user-form>
-    </el-card>
+    </ume-card>
   </div>
 </template>
 <script>
+import { Notice } from '@/component/ui';
 import Message from '@/model/Message';
-import ui from '@/model/ui';
-import resource from '@/resource';
 import UserForm from './UserForm';
 
 export default {
@@ -38,7 +37,7 @@ export default {
      */
     doFetch() {
       const USER_ID = this.$route.params.USER_ID;
-      resource.invoke('EMWS20001', ['RetrieveByPrimaryKey', 'EM_USER',
+      this.$root.callService('EMS20001', ['RetrieveByPrimaryKey', 'EM_USER',
         { USER_ID }]).then((res) => {
           this.form = res;
         });
@@ -48,8 +47,11 @@ export default {
      * 提交表单数据
      */
     doSubmit() {
-      resource.invoke('EMWS20001', ['Update', 'EM_USER', this.form]).then(() => {
-        ui.UMEMessage.showMessage(new Message('MCM002I', ['用户']));
+      this.$root.callService('EMS20001', ['Update', 'EM_USER', this.form]).then(() => {
+        const message = new Message('MCM002I', ['用户']);
+        Notice.showMessage({
+          message,
+        });
         this.forwardToSearch();
       });
     },

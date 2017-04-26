@@ -1,5 +1,5 @@
 <template>
-  <ume-date-picker
+  <el-date-picker
     :size="size"
     :format="format"
     :readonly="readonly"
@@ -14,7 +14,7 @@
     :pickerOptions="internalPickerOptions"
     :type="type"
     @input="doInput">
-  </ume-date-picker>
+  </el-date-picker>
 </template>
 <script>
   import Util from '@/model/Util';

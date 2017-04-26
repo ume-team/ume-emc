@@ -1,5 +1,5 @@
 <template>
-  <ume-dialog
+  <el-dialog
     :title="title"
     :modal="modal"
     :modalAppendToBody="modalAppendToBody"
@@ -16,7 +16,7 @@
     @close="doClose">
     <slot v-if="isCacheDialogContent"></slot>
     <slot name="footer"></slot>
-  </ume-dialog>
+  </el-dialog>
 </template>
 <script>
   export default {
