@@ -32,6 +32,19 @@ function createAppErrByServerException(exceptions) {
   return ret;
 }
 
+/**
+ * 创建Get请求的Url
+ * @param  {String}  serviceId    服务ID(EMWS00001)
+ * @param  {Array}   serviceParam 服务参数信息
+ * @return {String}
+ */
+function createGetUrl(serviceId, serviceParam) {
+  // Url
+  const url = Util.getConfigValue('PROXY_KEY');
+  const requestData = JSON.stringify(serviceParam);
+  return `${url}/${serviceId}/${requestData}`;
+}
+
 export default class UmeHttp {
   /**
    * 执行指定服务
@@ -47,9 +60,13 @@ export default class UmeHttp {
       TOKEN: Auth.getToken(),
     };
     // Url
-    const url = Util.getConfigValue('PROXY_KEY') + serviceId;
+    let url = Util.getConfigValue('PROXY_KEY') + serviceId;
     // 默认使用POST
     const method = Util.isEmpty(umeConfig.method) ? 'post' : umeConfig.method;
+    // GET的场合，创建GET请求的URL
+    if (method.toLowerCase() === 'get') {
+      url = createGetUrl(serviceId, serviceParam);
+    }
     // 超时时间
     umeConfig.timeout = Util.getConfigValue('SERVICE_TIME_OUT');
 
@@ -58,7 +75,7 @@ export default class UmeHttp {
       Http[method](url, serviceParam, umeConfig).then((res) => {
         const resData = res.data;
         // 收到错误信息的场合
-        if (resData.resultCode !== 1) {
+        if (resData.resultCode !== 0) {
           const exceptions = Util.isEmpty(resData.exceptions) ?
             [] : resData.exceptions;
           const error = createAppErrByServerException(exceptions);

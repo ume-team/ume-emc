@@ -24,16 +24,27 @@ export default {
   methods: {
     doFetch() {
       const entityID = this.$route.params.id;
-      this.$root.callService('EMS10001', [entityID]).then((res) => {
-        this.entityDesc = res;
-        return this.$root.callService('EMS10002', [entityID]);
-      }).then((res) => {
-        this.entityConstraint = res;
-        return this.$root.callService('EMS20001', ['Retrieve', entityID,
-        { theOrderByCondition: 'USER_ID desc', theFetchStart: 0, theFetchSize: 10 }]);
-      }).then((res) => {
-        this.entityData = res;
-      });
+      const serviceList = [
+        {
+          id: 'EMS10001',
+          param: [entityID],
+        },
+        {
+          id: 'EMS10002',
+          param: [entityID],
+        },
+        {
+          id: 'EMS20001',
+          param: ['Retrieve', entityID,
+        { theOrderByCondition: 'USER_ID desc', theFetchStart: 0, theFetchSize: 10 }],
+        },
+      ];
+      this.$service.callMulti(serviceList)
+        .then((res) => {
+          this.entityDesc = res[0];
+          this.entityConstraint = res[1];
+          this.entityData = res[2];
+        });
     },
   },
   components: {

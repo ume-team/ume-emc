@@ -1,17 +1,13 @@
-import Element from 'element-ui';
-import locale from 'element-ui/lib/locale/lang/zh-CN';
-import 'element-ui/lib/theme-default/index.css';
+import Setaria from 'setaria-ui';
+import locale from 'setaria-ui/lib/locale/lang/zh-CN';
+import 'setaria-ui/lib/theme-default/index.css';
 import Util from '@/model/Util';
 import DatePicker from './package/DatePicker';
-import Dialog from './package/Dialog';
-import Form from './package/Form';
 import LoadingIndicator from './package/LoadingIndicator';
 import Notice from './package/Notice';
 
 const COMPONENTS = {
   DatePicker,
-  Dialog,
-  Form,
   LoadingIndicator,
   Notice,
 };
@@ -19,12 +15,12 @@ const COMPONENTS = {
 function install(Vue) {
   /* istanbul ignore if */
   if (install.installed) return;
-  // 使用中文语言加载Element UI
-  Element.install(Vue, locale);
+  // 使用中文语言加载Setaria UI
+  Setaria.install(Vue, locale);
   // 修改ElemengUI控件的命名空间
-  Object.keys(Element).forEach((key) => {
-    const component = Element[key];
-    let componentName = Element[key].name;
+  Object.keys(Setaria).forEach((key) => {
+    const component = Setaria[key];
+    let componentName = Setaria[key].name;
     if (!Util.isEmpty(componentName) && componentName.indexOf('El') === 0) {
       componentName = `Ume${componentName.substring(2)}`;
       // 查找组件是否已被定制化
@@ -49,7 +45,7 @@ if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
 
-const UI = Object.assign({}, Element, {
+const UI = Object.assign({}, Setaria, {
   install,
   LoadingIndicator,
   Notice,

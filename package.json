@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.15.x",
-    "element-ui": "^1.2.x",
+    "setaria-ui": "^1.0.x",
     "lodash": "^4.17.x",
     "moment": "^2.17.x",
     "vue": "^2.2.x",

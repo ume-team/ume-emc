@@ -1,4 +1,4 @@
-import { Message, MessageBox, Notification } from 'element-ui';
+import { Message, MessageBox, Notification } from 'setaria-ui';
 import Util from '@/model/Util';
 
 /* eslint class-methods-use-this: ["error",

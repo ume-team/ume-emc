@@ -1,4 +1,4 @@
-import { Loading } from 'element-ui';
+import { Loading } from 'setaria-ui';
 import Util from '@/model/Util';
 
 let instance = null;

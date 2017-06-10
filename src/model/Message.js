@@ -29,7 +29,7 @@ function formatMessage(id, params) {
  * @param  {String} id 消息ID
  * @return {String} 消息类型
  */
-function getMessageType(id) {
+function getMessageType(id = null) {
   let ret = '';
   const type = id !== null ? id.charAt(id.length - 1) : '';
   switch (type) {

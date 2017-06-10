@@ -50,7 +50,6 @@ function createTemplateData(workSheet) {
       break;
     }
   }
-  console.log(data);
   return data;
 }
 
@@ -63,25 +62,27 @@ function getItemObject(workSheet, itemColumnConfig, row) {
   ret.itemName = utils.getCellValue(workSheet, itemColumnConfig.ITEM_NAME + row);
   // 画面项目ID
   ret.itemId = utils.getCellValue(workSheet, itemColumnConfig.ITEM_ID + row);
-  // 组件类型
+  // 项目类型
+  ret.itemType = utils.getCellValue(workSheet, itemColumnConfig.ITEM_TYPE + row);
+  // 项目是否为空
+  ret.itemIsNull = utils.getCellValue(workSheet, itemColumnConfig.ITEM_IS_NULL + row);
+  // HTML组件：组件类型
   ret.itemComponentType = utils.getCellValue(workSheet, itemColumnConfig.ITEM_COMPONENT_TYPE + row);
   // 组件对象
   ret.itemComponent = {
     tag: config.COMPONENT_TYPE[ret.itemComponentType]
   };
-  // 校验类型
-  ret.itemValidateType = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_TYPE + row);
-  // 是否必须输入
+  // 校验：必须输入
   ret.itemValidateIsNull = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_IS_NULL + row);
-  // 最大长度
+  // 校验：最大长度
   ret.itemValidateMaxLength = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_MAX_LENGTH + row);
-  // 最小长度
+  // 校验：最小长度
   ret.itemValidateMinLength = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_MIN_LENGTH + row);
-  // 长度
+  // 校验：长度
   ret.itemValidateLength = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_LENGTH + row);
-  // 最大值
+  // 校验：最大值
   ret.itemValidateMaxValue = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_MAX_VALUE + row);
-  // 最小值
+  // 校验：最小值
   ret.itemValidateMinValue = utils.getCellValue(workSheet, itemColumnConfig.ITEM_VALIDATE_MIN_VALUE + row);
   // 是否为检索参数
   ret.itemIsSearchParam = utils.getCellValue(workSheet, itemColumnConfig.ITEM_IS_SEARCH_PARAM + row);
