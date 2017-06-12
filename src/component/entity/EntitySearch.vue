@@ -35,8 +35,7 @@ export default {
         },
         {
           id: 'EMS20001',
-          param: ['Retrieve', entityID,
-        { theOrderByCondition: 'USER_ID desc', theFetchStart: 0, theFetchSize: 10 }],
+          param: ['Retrieve', entityID, { theFetchStart: 0, theFetchSize: 10 }],
         },
       ];
       this.$service.callMulti(serviceList)
