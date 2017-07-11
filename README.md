@@ -1,6 +1,6 @@
 # ume-emc
 
-> UME Entity Management Client[UME元数据管理系统Web客户端]
+> UME Entity Management Client - UME元数据管理系统Web客户端
 
 ## 开发所需软件
 
