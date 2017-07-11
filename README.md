@@ -1,7 +1,7 @@
-# ume-web
+# ume-emc
 
-> UME FrontEnd System
-基于Vue.js系列 + Element UI的元数据系统
+> UME Entity Manager Client
+UME元数据管理系统Web客户端
 
 ## 开发所需软件
 
