@@ -5,6 +5,7 @@
   </div>
 </template>
 <script>
+import EntityDescResource from '@/model/resource/EntityDescResource';
 import UmeEntityTable from './UmeEntityTable';
 
 export default {
@@ -13,6 +14,10 @@ export default {
       entityDesc: {},
       entityConstraint: {},
       entityData: [],
+      entitySearchCondition: {
+        theFetchStart: 0,
+        theFetchSize: 10,
+      },
     };
   },
   created() {
@@ -23,27 +28,15 @@ export default {
   },
   methods: {
     doFetch() {
-      const entityID = this.$route.params.id;
-      const serviceList = [
-        {
-          id: 'EMS10001',
-          param: [entityID],
-        },
-        {
-          id: 'EMS10002',
-          param: [entityID],
-        },
-        {
-          id: 'EMS20001',
-          param: ['Retrieve', entityID, { theFetchStart: 0, theFetchSize: 10 }],
-        },
-      ];
-      this.$service.callMulti(serviceList)
-        .then((res) => {
-          this.entityDesc = res[0];
-          this.entityConstraint = res[1];
-          this.entityData = res[2];
-        });
+      const entityId = this.$route.params.id;
+      EntityDescResource.getEmDescAndData(
+        entityId,
+        'Retrieve',
+        this.entitySearchCondition)
+          .then(({ entityDesc, entityData }) => {
+            this.entityDesc = entityDesc;
+            this.entityData = entityData;
+          });
     },
   },
   components: {

@@ -51,3 +51,4 @@ const UI = Object.assign({}, Setaria, {
   Notice,
 });
 export default UI;
+export { LoadingIndicator, Notice };

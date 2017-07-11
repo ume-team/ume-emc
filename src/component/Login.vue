@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import UI from '@/component/ui';
+  import { LoadingIndicator } from '@/component/ui';
   import loginFormRule from '@/model/rule/LoginFormRule';
   import Auth from '@/model/Auth';
   import Util from '@/model/Util';
@@ -68,15 +68,15 @@
        * @event
        */
       doSubmit() {
-        UI.LoadingIndicator.show();
+        LoadingIndicator.show();
         Auth.login(this.loginForm.loginId, this.loginForm.password)
           .then(() => {
-            UI.LoadingIndicator.hide();
+            LoadingIndicator.hide();
             const path = this.$route.query.path || '/';
             this.$router.push({ path });
           })
           .catch((error) => {
-            UI.LoadingIndicator.hide();
+            LoadingIndicator.hide();
             this.$root.handleError(error);
           });
       },

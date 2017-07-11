@@ -5,19 +5,22 @@ export default class ErrorHandler {
   static handleError(error, source) {
     let ret = null;
     const isErrorFromVue = source instanceof Object;
-
-    if (error instanceof ApplicationError) {
+    // 来源：restful调用，应用框架
+    if (error instanceof Error) {
       ret = error;
-    } else if (error instanceof Object
-      && Object.prototype.hasOwnProperty.call(error, 'message')) {
-      ret = new ApplicationError(null, null, error.message);
+    // 来源：组件渲染
+    } else if (isErrorFromVue) {
+      ret = new ApplicationError('MAM004E');
+    // // 来源：未知
+    // } else if (error instanceof Object
+    //   && Object.prototype.hasOwnProperty.call(error, 'message')) {
+    //   ret = new ApplicationError(null, null, error.message);
+    // 来源：事件函数中的运行期错误
     } else if (error instanceof String) {
       ret = new ApplicationError(null, null, error);
     }
     if (ret === null || ret === undefined
-      || (!Util.isEmpty(ret) && Util.isEmpty(ret.message))
-      // 生产环境下不显示具体的代码错误
-      || (Util.isProdunctionEnv() && isErrorFromVue)) {
+      || (!Util.isEmpty(ret) && Util.isEmpty(ret.message))) {
       ret = new ApplicationError('MAM004E');
     }
 

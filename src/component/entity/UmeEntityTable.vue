@@ -1,15 +1,17 @@
 <template>
-  <el-table border stripe class="ume-entity-table" :data="data">
-    <el-table-column v-for="col in header" :label="col.colName" :prop="col.colId" :key="col.colId" :width="col.$width">
-    </el-table-column>
-    <el-table-column fixed="right" label="操作" :width="controlColumnWidth">
+  <ume-table border stripe class="ume-entity-table" :data="data">
+    <ume-table-column v-for="col in header" :label="col.colName" :prop="col.colId" :key="col.colId" :width="col.$width">
+    </ume-table-column>
+    <ume-table-column fixed="right" label="操作" :width="controlColumnWidth">
       <template scope="scope">
-        <el-button size="small" v-show="isShowDetail">详情</el-button>
-        <el-button size="small" v-show="isShowUpdate">更新</el-button>
-        <el-button size="small" v-show="isShowDelete">删除</el-button>
+        <ume-button-group>
+          <ume-button size="small" v-show="isShowDetail">详情</ume-button>
+          <ume-button size="small" v-show="isShowUpdate">更新</ume-button>
+          <ume-button size="small" v-show="isShowDelete">删除</ume-button>
+        </ume-button-group>
       </template>
-    </el-table-column>
-  </el-table>
+    </ume-table-column>
+  </ume-table>
 </template>
 <script>
 import Util from '@/model/Util';
@@ -71,7 +73,7 @@ export default {
       return this.accLevel >= 1;
     },
     controlColumnWidth() {
-      const width = (this.accLevel * 10) + (this.accLevel * 40);
+      const width = (this.accLevel * 10) + (this.accLevel * 35);
       return `${width}`;
     },
   },

@@ -14,7 +14,7 @@ export const MESSAGE_TYPE = {
  * @param  {Array}  params 消息参数
  * @return {String} 已格式化的消息
  */
-function formatMessage(id, params) {
+function formatMessage(id = '', params) {
   let ret = Util.isEmpty(MessageConfig[id]) ? '' : MessageConfig[id];
   if (!Util.isEmpty(ret) && !Util.isEmpty(params)) {
     params.forEach((item, index) => {
