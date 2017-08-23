@@ -11,12 +11,12 @@
   </div>
 </template>
 <script>
-  import Message from '@/model/Message';
+  import Setaria from 'setaria';
 
   export default {
     computed: {
       msg() {
-        return new Message('MAM006E').toString();
+        return new Setaria.Message('MAM006E').toString();
       },
     },
     methods: {

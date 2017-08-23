@@ -1,8 +1,8 @@
-import EntitySearch from '@/component/entity/EntitySearch';
-import EntityCreate from '@/component/entity/EntityCreate';
-import Login from '@/component/Login';
 import Dashboard from '@/component/Dashboard';
+import Login from '@/component/Login';
 import PageNotFound from '@/component/PageNotFound';
+import EntityCreate from '@/component/entity/EntityCreate';
+import EntitySearch from '@/component/entity/EntitySearch';
 
 export default {
   routes: [

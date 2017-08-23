@@ -5,8 +5,8 @@
 </template>
 
 <script>
+import { util } from 'setaria';
 import SystemMenuItem from '@/component/menu/SystemMenuItem';
-import Util from '@/model/Util';
 
 const ENTITY_ADD_PREFIX = '新增';
 const ENTITY_SEARCH_PREFIX = '查询';
@@ -59,7 +59,7 @@ export default {
       sysUserAclList.forEach((item) => {
         const resGroup = item.resGroup;
         const resIndex = item.resIndex;
-        if (!Util.isEmpty(resGroup)) {
+        if (!util.isEmpty(resGroup)) {
           if (!parentMenuItemNameList.includes(resGroup)) {
             parentMenuItemNameList.push(resGroup);
             menuList.push({
@@ -78,10 +78,10 @@ export default {
       // 填充resGroup节点
       menuList.forEach((menuItem) => {
         // 如果是resGroup菜单的场合
-        if (!Util.isEmpty(menuItem.resGroup)) {
+        if (!util.isEmpty(menuItem.resGroup)) {
           sysUserAclList.forEach((sysUserAclItem) => {
             // 添加Entity菜单项
-            if (Util.isEqual(sysUserAclItem.resGroup, menuItem.resGroup)) {
+            if (util.isEqual(sysUserAclItem.resGroup, menuItem.resGroup)) {
               menuItem.children.push(this.createEntityMenuItem(sysUserAclItem));
             }
           });

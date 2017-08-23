@@ -1,36 +1,118 @@
 <template>
-  <div id="app">
-    <div class="header-wrapper">
-      <header class="header">
-        <div class="system-title">
-          {{ appTitle }}
+  <div class="system-layout system-layout-has-sider">
+    <div class="system-layout-sider">
+      <div class="system-layout-sider-children">
+        <div class="logo">
         </div>
-        <ul class="nav">
-          <li class="nav-item">
-            {{ userName }}
-          </li>
-          <li class="nav-item">
-            <ume-button type="primary" class="login-button" @click="doLogout">注销</ume-button>
-          </li>
-        </ul>
-      </header>
+        <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu"></system-menu>
+      </div>
     </div>
-    <div class="main-container">
-      <ume-row>
-        <ume-col :span="4" class="nav-menu-container">
-          <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu"></system-menu>
-        </ume-col>
-        <ume-col :span="20" class="page-container">
-          <router-view></router-view>
-        </ume-col>
-      </ume-row>
+    <div class="system-layout system-layout-content">
+      <div class="system-layout-header">
+        <span class="nav-container">
+          <span class="nav-item">
+            {{ userName }}
+          </span>
+          <span class="nav-item">
+            <ume-button type="primary" class="login-button" @click="doLogout">注销</ume-button>
+          </span>
+        </span>
+      </div>
+      <div class="system-layout-page-content">
+        <router-view></router-view>
+      </div>
+      <div class="system-layout-footer">
+        UME System ©2017 Created by UME Team
+      </div>
     </div>
   </div>
 </template>
+<style>
+  .system-layout {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-flex: 1;
+    -webkit-flex: auto;
+    -ms-flex: auto;
+    flex: auto;
+    background: #ececec;
+  }
+  .system-layout-has-sider {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  .system-layout-sider {
+    -webkit-transition: all .15s cubic-bezier(.645,.045,.355,1);
+    transition: all .15s cubic-bezier(.645,.045,.355,1);
+    position: relative;
+    background: #324157;
+    min-width: 0;
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0px;
+    flex: 0 0 200px;
+    max-width: 200px;
+    min-width: 200px;
+    width: 200px;
+  }
+  .system-layout-content {
+    margin-left: 200px;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+  .system-layout-header {
+    background: #f1f1f1;
+    padding: 0 10px;
+    height: 64px;
+    line-height: 64px;
+  }
+  .nav-container {
+    float: right;
+  }
+  .nav-item + .nav-item {
+    margin-left: 10px;
+  }
+  .system-layout-footer {
+    padding: 24px 50px;
+    color: rgba(0,0,0,.65);
+    font-size: 12px;
+  }
+  .system-layout-footer, .system-layout-header {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+  }
+  .system-layout-page-content {
+    -webkit-box-flex: 1;
+    -webkit-flex: auto;
+    -ms-flex: auto;
+    flex: auto;
+    padding: 10px;
+  }
+  .logo {
+    height: 64px;
+    background: #324157;
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-image: url('../assets/logo.png');
+  }
+</style>
 <script>
-  import Auth from '@/model/Auth';
-  import Util from '@/model/Util';
   import SystemMenu from '@/component/menu/SystemMenu';
+  import BizUtil from '@/model/BizUtil';
+  import UserResource from '@/model/resource/UserResource';
 
   export default {
     // 组件名称
@@ -45,21 +127,21 @@
        * @return {String}
        */
       appTitle() {
-        return Util.getConfigValue('APP_TITLE');
+        return BizUtil.getConfigValue('APP_TITLE');
       },
       /**
        * 用户名称
        * @return {String}
        */
       userName() {
-        return Auth.getUserInfo().user.userName;
+        return UserResource.getUser().user.userName;
       },
       /**
        * 菜单数据
        * @return {String}
        */
       accResList() {
-        return Auth.getUserInfo().accResList;
+        return UserResource.getUser().accResList;
       },
       /**
        * 当前使用的菜单项
@@ -80,7 +162,7 @@
        */
       doLogout() {
         // 调用登出服务
-        Auth.logout().then(() => {
+        UserResource.logout(UserResource.getUser().user.userId).then(() => {
           this.forwardToLogin();
         }).catch(() => {
           this.forwardToLogin();
@@ -102,81 +184,3 @@
     },
   };
 </script>
-<style>
-  #app {
-    height: 100%;
-  }
-  .header-wrapper {
-    height: 60px;
-  }
-  .header {
-    height: 60px;
-    background-color: white;
-    color: #677375;
-    top: 0;
-    left: 0;
-    width: 100%;
-    line-height: 60px;
-    z-index: 100;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-  }
-  .system-title{
-    margin: 0;
-    float: left;
-    font-size: 20px;
-    font-weight: 900;
-    width: 240px;
-    text-align: left;
-    padding-left: 10px;
-  }
-  .header .nav {
-    float: right;
-    width: 200px;
-    height: 100%;
-    line-height: 60px;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-  }
-  .header .nav-item {
-    margin: 0;
-    float: left;
-    list-style: none;
-    position: relative;
-    margin-left: 20px;
-  }
-  .main-container {
-    width: 100%;
-    margin-top: -60px;
-    padding: 60px 0 0;
-    box-sizing: border-box;
-    min-height: 100%;
-    height: 100%;
-  }
-  .main-container .page-container {
-    padding: 10px;
-    background-color: #edeef2;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-  .main-container > .el-row,
-  .main-container > .el-row > .el-col,
-  .main-container .nav-menu,
-  .page-container {
-    height: 100%;
-  }
-  .main-container .nav-menu-container {
-    overflow-x: none;
-    overflow-y: auto;
-    height: 100%;
-  }
-  .page-title {
-    font-size: 18px;
-    font-weight: 500;
-    color: #677375;
-    padding: 10px 2px;
-  }
-</style>

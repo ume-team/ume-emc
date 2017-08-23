@@ -1,11 +1,8 @@
-import Auth from '@/model/Auth';
-import ApplicationError from '@/model/ApplicationError';
-import Util from '@/model/Util';
-import store from '@/model/store';
-import Http from './Http';
+import Setaria, { ApplicationError, Http, util } from 'setaria';
+import BizUtil from './BizUtil';
 
 /**
- * 处理Ts服务的异常
+ * 处理Bd服务的异常
  * @param  {Array} exceptions 服务端异常
  * @return {ApplicationError} 客户端异常
  */
@@ -41,20 +38,18 @@ function createAppErrByServerException(exceptions) {
  */
 function createGetUrl(serviceId, serviceParam) {
   // Url
-  const url = Util.getConfigValue('PROXY_KEY');
+  const url = BizUtil.getConfigValue('PROXY_KEY');
   const requestData = JSON.stringify(serviceParam);
   return `${url}/${serviceId}/${requestData}`;
 }
 
 /**
  * 抛出异常处理
- * 因Firefox目前还不支持unhandledrejection，暂时将错误统一抛出至window.onerror事件
+ *
  * @param  {Object} error 拥有message键值的对象
  */
 function throwError(error) {
-  if (window.onerror) {
-    window.onerror(error);
-  }
+  throw error;
 }
 
 // 服务正常执行成功的状态码
@@ -63,55 +58,64 @@ const SERVICE_EXEC_SUCCESS_CODE = 0;
 export default class UmeHttp {
   /**
    * 调用指定服务
-   * @param  {String}  serviceId    服务ID(EMWS00001)
+   * @param  {String}  serviceId    服务ID(WS001)
    * @param  {Array}   serviceParam 服务参数信息
-   * @param  {Object}  config       服务配置信息（isShowError[Boolean]是否显示异常）
+   * @param  {Object}  config       服务配置信息（isShowError[Boolean] 是否显示异常）
    * @return {Promise} Promise
    */
   static invoke(serviceId, serviceParam = [], config = {}) {
     const umeConfig = config;
     // Headers
     umeConfig.headers = {
-      TOKEN: Auth.getToken(),
+      TOKEN: Setaria.plugin.store.state.common.token,
     };
     // Url
-    let url = Util.getConfigValue('PROXY_KEY') + serviceId;
+    let url = BizUtil.getConfigValue('PROXY_KEY') + serviceId;
     // 默认使用POST
-    const method = Util.isEmpty(umeConfig.method) ? 'post' : umeConfig.method;
+    const method = util.isEmpty(umeConfig.method) ? 'post' : umeConfig.method;
     // GET的场合，创建GET请求的URL
     if (method.toLowerCase() === 'get') {
       url = createGetUrl(serviceId, serviceParam);
     }
     // 超时时间
-    umeConfig.timeout = Util.getConfigValue('SERVICE_TIME_OUT');
+    if (umeConfig.timeout === undefined || umeConfig.timeout === null) {
+      // 设置默认值
+      umeConfig.timeout = BizUtil.getConfigValue('SERVICE_TIME_OUT');
+    }
+    if (util.isString(umeConfig.timeout)) {
+      umeConfig.timeout = parseInt(umeConfig.timeout, 10);
+    }
     // 设置加载提示状态
-    store().commit('loading', true);
+    Setaria.plugin.store.commit('common/loading', true);
     return new Promise((resolve, reject) => {
       // 调用指定服务
       Http[method](url, serviceParam, umeConfig).then((res) => {
+        // 重置加载提示状态
+        Setaria.plugin.store.commit('common/loading', false);
         const resData = res.data;
         // 收到错误信息的场合
         if (resData.resultCode !== SERVICE_EXEC_SUCCESS_CODE) {
-          const exceptions = Util.isEmpty(resData.exceptions) ?
+          const exceptions = util.isEmpty(resData.exceptions) ?
             [] : resData.exceptions;
           const error = createAppErrByServerException(exceptions);
           if (config.isShowError === false) {
             reject(error);
+          } else if (Object.hasOwnProperty.call(window, 'onunhandledrejection')) {
+            reject(error);
+          // 浏览器不支持unhandledrejection的场合
           } else {
-            throwError(error);
+            throw error;
           }
         }
         resolve(resData.resultObject);
-        // 重置加载提示状态
-        store().commit('loading', false);
       }).catch((error) => {
+        // 重置加载提示状态
+        Setaria.plugin.store.commit('common/loading', false);
         if (config.isShowError === false) {
           reject(error);
         } else {
           throwError(error);
         }
-        // 重置加载提示状态
-        store().commit('loading', false);
       });
     });
   }

@@ -1,32 +1,50 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import App from '@/App';
-import context from '@/component/plugin/context';
-import store from '@/component/plugin/store';
-import { router, navigate } from '@/component/plugin/navigate/index';
+import Setaria from 'setaria';
 import UI from '@/component/ui';
-import Util from '@/model/Util';
+import router from '@/config/router';
+import UserResource from '@/model/resource/UserResource';
+import App from './App';
 
-// 加载公用UI控件
+Vue.config.productionTip = false;
+// 加载消息定义文件
+Setaria.config.message = require('./config/message.json');
+// 加载UI组件
 Vue.use(UI);
-// 生产环境的场合
-if (Util.isProdunctionEnv()) {
-  // 不显示Vue日志和警告
-  Vue.config.silent = true;
-  // 不显示Vue产品信息
-  Vue.config.productionTip = false;
+// 加载路由组件
+Vue.use(Setaria.plugin.Navigate);
+const navi = new Setaria.plugin.Navigate(router);
+
+// 检查用户是否登录
+function isLogin(to, from, next) {
+  // 当目标画面需要鉴权的场合
+  if (to.meta.auth !== false) {
+    // 当前用户没有登录的场合
+    if (!UserResource.isLogin()) {
+      // 登录成功后重新跳转至目标画面
+      const path = to.path;
+      next({
+        name: 'Login',
+        query: { path },
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 }
-
-Vue.use(UI);
-Vue.use(context);
-Vue.use(navigate);
+// 注册全局导航钩子
+navi.beforeEach(isLogin);
 
 /* eslint-disable no-new */
 new Vue({
   el: '#main',
-  router,
-  store,
+  store: Setaria.plugin.store,
+  router: navi,
+  created() {
+  },
   template: '<App/>',
   components: { App },
 });

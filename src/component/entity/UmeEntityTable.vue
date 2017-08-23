@@ -14,7 +14,7 @@
   </ume-table>
 </template>
 <script>
-import Util from '@/model/Util';
+import { util } from 'setaria';
 
 const DEFAULT_COLUMN_WIDTH = 150;
 
@@ -24,10 +24,10 @@ function createTableHeader({ colCfgMap = {}, hideColSet = [],
   Object.entries(colCfgMap).forEach(([k, v]) => {
     const colItem = v;
     if (!hideColSet.includes(k) && !disableColSet.includes(k)) {
-      const colDispCfg = !Util.isEmpty(columnDispConfig[k]) ?
+      const colDispCfg = !util.isEmpty(columnDispConfig[k]) ?
         columnDispConfig[k] : {};
       // 设置列的宽度
-      colItem.$width = Util.isNumber(colDispCfg.width) ?
+      colItem.$width = util.isNumber(colDispCfg.width) ?
         colDispCfg.width : DEFAULT_COLUMN_WIDTH;
       ret.push(v);
     }

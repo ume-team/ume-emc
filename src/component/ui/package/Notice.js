@@ -1,5 +1,5 @@
+import { util } from 'setaria';
 import { Message, MessageBox, Notification } from 'setaria-ui';
-import Util from '@/model/Util';
 
 /* eslint class-methods-use-this: ["error",
   { "exceptMethods": ["getTitleByMessageType"] }] */
@@ -38,7 +38,7 @@ class Notice {
    */
   static showMessage({ type = 'error', message = '' },
     { duration = 3000, onClose = null } = {}) {
-    const msg = Util.isObject(message) ? message.toString() : message;
+    const msg = util.isObject(message) ? message.toString() : message;
     Message({
       type,
       title: Notice.getTitleByMessageType(type),
@@ -55,7 +55,7 @@ class Notice {
    * @return {MessageBox}
    */
   static showMessageBox({ type = 'warning', message = '' } = {}) {
-    const msg = Util.isObject(message) ? message.toString() : message;
+    const msg = util.isObject(message) ? message.toString() : message;
     return MessageBox({
       title: Notice.getTitleByMessageType(type),
       type,

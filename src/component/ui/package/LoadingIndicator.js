@@ -1,20 +1,21 @@
+import { util } from 'setaria';
 import { Loading } from 'setaria-ui';
-import Util from '@/model/Util';
+import BizUtil from '@/model/BizUtil';
 
 let instance = null;
 
 export default class {
   static show() {
-    if (Util.isEmpty(instance)) {
+    if (util.isEmpty(instance)) {
       instance = Loading.service({
         fullscreen: true,
-        text: Util.getConfigValue('LOADING_TEXT'),
+        text: BizUtil.getConfigValue('LOADING_TEXT'),
       });
     }
   }
 
   static hide() {
-    if (!Util.isEmpty(instance)) {
+    if (!util.isEmpty(instance)) {
       instance.close();
       instance = null;
     }

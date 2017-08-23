@@ -16,12 +16,36 @@
     </ume-col>
   </ume-row>
 </template>
-
+<style scoped>
+  .login-container {
+    height: 100%;
+    background-color: #4fa6e6;
+  }
+  .login-system-title {
+    text-align: center;
+    color: #4fa6e6;
+    font-size: 24px;
+    font-weight: 900;
+    padding: 20px;
+  }
+  .login-form {
+    min-width: 300px;
+    background-color: #FCFCFD;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .login-button-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .login-button {
+    width: 200px;
+  }
+</style>
 <script>
-  import { LoadingIndicator } from '@/component/ui';
   import loginFormRule from '@/model/rule/LoginFormRule';
-  import Auth from '@/model/Auth';
-  import Util from '@/model/Util';
+  import UserResource from '@/model/resource/UserResource';
+  import BizUtil from '@/model/BizUtil';
 
   export default {
     /**
@@ -55,7 +79,7 @@
        * @return {String}
        */
       appTitle() {
-        return Util.getConfigValue('APP_TITLE');
+        return BizUtil.getConfigValue('APP_TITLE');
       },
     },
     /**
@@ -68,45 +92,12 @@
        * @event
        */
       doSubmit() {
-        LoadingIndicator.show();
-        Auth.login(this.loginForm.loginId, this.loginForm.password)
+        UserResource.login(this.loginForm.loginId, this.loginForm.password)
           .then(() => {
-            LoadingIndicator.hide();
             const path = this.$route.query.path || '/';
             this.$router.push({ path });
-          })
-          .catch((error) => {
-            LoadingIndicator.hide();
-            this.$root.handleError(error);
           });
       },
     },
   };
 </script>
-
-<style scoped>
-  .login-container {
-    height: 100%;
-    background-color: #4fa6e6;
-  }
-  .login-system-title {
-    text-align: center;
-    color: #4fa6e6;
-    font-size: 24px;
-    font-weight: 900;
-    padding: 20px;
-  }
-  .login-form {
-    min-width: 300px;
-    background-color: #FCFCFD;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  .login-button-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  .login-button {
-    width: 200px;
-  }
-</style>
