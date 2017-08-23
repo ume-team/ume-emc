@@ -1,7 +1,10 @@
 <template>
   <ume-row type="flex" justify="center" align="middle" class="login-container">
-    <ume-col :span="7" class="login-form">
-      <div class="login-system-title">{{ appTitle }}</div>
+    <ume-col :span="5" class="login-form">
+      <div class="login-system-title">
+        <img src="../assets/logo_512*512.png" class="system-logo"/>
+        <span class="title">{{ appTitle }}</span>
+      </div>
       <ume-form :model="loginForm" :rules="loginFormRule" ref="loginForm" @submit="doSubmit">
         <ume-form-item prop="loginId">
           <ume-input v-model="loginForm.loginId" placeholder="登录名" autofocus></ume-input>
@@ -19,17 +22,27 @@
 <style scoped>
   .login-container {
     height: 100%;
-    background-color: #4fa6e6;
+    background-color: #f8f8f8;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.08);
   }
   .login-system-title {
+    height: 40px;
+    line-height: 40px;
     text-align: center;
-    color: #4fa6e6;
-    font-size: 24px;
-    font-weight: 900;
-    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .system-logo {
+    width: 40px;
+  }
+  .title {
+    vertical-align: text-bottom;
+    font-size: 18px;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #666;
   }
   .login-form {
-    min-width: 300px;
+    min-width: 320px;
     background-color: #FCFCFD;
     padding: 20px;
     border-radius: 10px;
@@ -39,7 +52,7 @@
     text-align: center;
   }
   .login-button {
-    width: 200px;
+    width: 100%;
   }
 </style>
 <script>
