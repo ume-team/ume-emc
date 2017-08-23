@@ -172,7 +172,7 @@
        * 跳转至登录页面
        */
       forwardToLogin() {
-        this.$router.push({ name: 'Login' });
+        this.$router.forwardTo('Login');
       },
     },
     /**
