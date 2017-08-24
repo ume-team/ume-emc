@@ -39,8 +39,10 @@
     },
     created() {
       // 程序抛出的错误信息处理
-      Setaria.config.errorHanlder = (err) => {
-        Notice.showMessage(err.noIdMessage);
+      Setaria.config.errorHanlder = ({ noIdMessage }) => {
+        Notice.showMessage({
+          message: noIdMessage,
+        });
       };
     },
     data() {
