@@ -2,7 +2,8 @@
   <div class="system-layout system-layout-has-sider">
     <div class="system-layout-sider">
       <div class="system-layout-sider-children">
-        <div class="logo">
+        <div class="system-title-container">
+          <span class="title"><img src="../assets/logo_512*512.png" class="system-logo"/>{{ appTitle }}</span>
         </div>
         <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu"></system-menu>
       </div>
@@ -101,12 +102,23 @@
     flex: auto;
     padding: 10px;
   }
-  .logo {
+  .system-title-container {
     height: 64px;
+    line-height: 64px;
+    text-align: center;
     background: #324157;
-    background-position: 100%;
-    background-repeat: no-repeat;
-    background-image: url('../assets/logo.png');
+  }
+  .system-logo {
+    width: 40px;
+    margin-top: -5px;
+    vertical-align: middle;
+  }
+  .title {
+    vertical-align: text-bottom;
+    font-size: 18px;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #bfcbd9;
   }
 </style>
 <script>
