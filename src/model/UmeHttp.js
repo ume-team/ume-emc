@@ -85,13 +85,17 @@ export default class UmeHttp {
     if (util.isString(umeConfig.timeout)) {
       umeConfig.timeout = parseInt(umeConfig.timeout, 10);
     }
-    // 设置加载提示状态
-    Setaria.plugin.store.commit('common/loading', true);
+    if (config.loading !== false) {
+      // 设置加载提示状态
+      Setaria.plugin.store.commit('common/loading', true);
+    }
     return new Promise((resolve, reject) => {
       // 调用指定服务
       Http[method](url, serviceParam, umeConfig).then((res) => {
-        // 重置加载提示状态
-        Setaria.plugin.store.commit('common/loading', false);
+        if (config.loading !== false) {
+          // 重置加载提示状态
+          Setaria.plugin.store.commit('common/loading', false);
+        }
         const resData = res.data;
         // 收到错误信息的场合
         if (resData.resultCode !== SERVICE_EXEC_SUCCESS_CODE) {
