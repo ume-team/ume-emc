@@ -20,6 +20,9 @@
         </span>
       </div>
       <div class="system-layout-page-content">
+        <ume-breadcrumb separator="/" class="system-bread-crumb">
+          <ume-breadcrumb-item v-for="crumb in breadCrumb" :to="{ path: crumb.path }" :key="crumb.name">{{ crumb.meta.title }}</ume-breadcrumb-item>
+        </ume-breadcrumb>
         <router-view></router-view>
       </div>
       <div class="system-layout-footer">
@@ -120,6 +123,9 @@
     display: inline-block;
     color: #bfcbd9;
   }
+  .system-bread-crumb {
+    margin-bottom: 10px;
+  }
 </style>
 <script>
   import SystemMenu from '@/component/menu/SystemMenu';
@@ -161,6 +167,19 @@
        */
       activeMenu() {
         return this.$router.currentRoute.path;
+      },
+      /**
+       * 面包屑
+       * @return {Array}
+       */
+      breadCrumb() {
+        return this.$route.matched.map((item, index) => {
+          const ret = item;
+          if (ret.path === '' && index === 0) {
+            ret.path = '/';
+          }
+          return ret;
+        });
       },
     },
     /**

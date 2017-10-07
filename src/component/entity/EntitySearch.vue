@@ -13,7 +13,7 @@
         </ume-dynamic-form>
       </ume-collapse-item>
     </ume-collapse>
-    <ume-entity-table :desc="entityDesc" :data="entityData" :accLevel="4">
+    <ume-entity-table :desc="entityDesc" :data="entityData" :accLevel="4" @update="doUpdate">
     </ume-entity-table>
     <div class="search-result-pagination">
       <ume-pagination
@@ -26,6 +26,15 @@
         @size-change="doResultListSizeChange">
       </ume-pagination>
     </div>
+    <ume-dialog v-model="isShowUpdateForm"
+      :close-on-click-modal="false"
+      title="修改数据"
+      :modal-append-to-body="true">
+      <entity-update :primary-keys="selectedEntityPrimaryKeys"
+        @submit="doUpdateSuccessful"
+        @cancel="doCancelUpdate">
+      </entity-update>
+    </ume-dialog>
   </div>
 </template>
 <style scoped>
@@ -41,9 +50,10 @@
   }
 </style>
 <script>
-import EntityDescResource from '@/model/resource/EntityDescResource';
+import EntityResource from '@/model/resource/EntityResource';
 import BizUtil from '@/model/BizUtil';
 import UmeEntityTable from './UmeEntityTable';
+import EntityUpdate from './EntityUpdate';
 
 export default {
   data() {
@@ -73,6 +83,8 @@ export default {
       currentPage: 1,
       pageSize: parseInt(BizUtil.getConfigValue('TABLE_PAGE_SIZE'), 10),
       totalCount: 0,
+      isShowUpdateForm: false,
+      selectedEntityPrimaryKeys: null,
     };
   },
   created() {
@@ -96,12 +108,12 @@ export default {
   methods: {
     doFetch() {
       const entityId = this.$route.params.id;
-      const getEmDesc = EntityDescResource.getEmDesc(entityId);
-      const getEmData = EntityDescResource.getEmData(entityId,
+      const getEmDesc = EntityResource.getEmDesc(entityId);
+      const getEmDataList = EntityResource.getEmDataList(entityId,
         this.searchCondition);
-      const getEmDataCount = EntityDescResource.getEmDataCount(entityId,
+      const getEmDataCount = EntityResource.getEmDataCount(entityId,
         this.searchCondition);
-      Promise.all([getEmDesc, getEmData, getEmDataCount])
+      Promise.all([getEmDesc, getEmDataList, getEmDataCount])
         .then((res) => {
           this.entityDesc = res[0];
           this.entityData = res[1];
@@ -120,9 +132,25 @@ export default {
       this.pageSize = val;
       this.doFetch();
     },
+    doUpdate(val) {
+      const entityId = this.$route.params.id;
+      EntityResource.getEmPrimaryObj(entityId, val)
+        .then((res) => {
+          this.selectedEntityPrimaryKeys = res;
+          this.isShowUpdateForm = true;
+        });
+    },
+    doUpdateSuccessful() {
+      this.isShowUpdateForm = false;
+      this.doFetch();
+    },
+    doCancelUpdate() {
+      this.isShowUpdateForm = false;
+    },
   },
   components: {
     UmeEntityTable,
+    EntityUpdate,
   },
 };
 </script>

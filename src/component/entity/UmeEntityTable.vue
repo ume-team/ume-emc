@@ -12,7 +12,7 @@
       <ume-table-column fixed="right" label="操作" :width="controlColumnWidth">
         <template scope="scope">
           <div class="control-button-container">
-            <ume-button type="text">修改</ume-button>
+            <ume-button type="text" @click="doUpdate(scope.row)">修改</ume-button>
             <span class="button-separator">|</span>
             <ume-button type="text">删除</ume-button>
           </div>
@@ -119,6 +119,9 @@
             },
           },
         );
+      },
+      doUpdate(row) {
+        this.$emit('update', row);
       },
     },
   };

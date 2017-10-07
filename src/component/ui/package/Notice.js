@@ -50,20 +50,51 @@ class Notice {
 
   /**
    * 显示消息提示框
-   * @param  {String}         options.type    消息类型，用于显示图标
-   * @param  {String|Message} options.message 消息内容
+   * @param  {String}         options.type       消息类型，用于显示图标
+   * @param  {String|Message} options.message    消息内容
+   * @param  {Boolean}        showConfirmButton  是否显示确定按钮
+   * @param  {Boolean}        showCancelButton   是否显示取消按钮
+   * @param  {Boolean}        closeOnClickModal  是否可通过点击遮罩关闭 MessageBox
+   * @param  {Boolean}        closeOnPressEscape 是否可通过按下 ESC 键关闭 MessageBox
+   * @param  {String}         confirmButtonText  确定按钮的文本内容
+   * @param  {String}         cancelButtonText   取消按钮的文本内容
    * @return {MessageBox}
    */
-  static showMessageBox({ type = 'warning', message = '' } = {}) {
+  static showMessageBox({
+    type = 'warning',
+    message = '',
+    showConfirmButton = true,
+    showCancelButton = true,
+    closeOnClickModal = false,
+    closeOnPressEscape = false,
+    confirmButtonText = '确定',
+    cancelButtonText = '取消',
+  } = {}) {
     const msg = util.isObject(message) ? message.toString() : message;
-    return MessageBox({
-      title: Notice.getTitleByMessageType(type),
-      type,
-      message: msg,
-      showCancelButton: true,
-      closeOnClickModal: false,
-      closeOnPressEscape: false,
+    return new Promise((resolve, reject) => {
+      MessageBox({
+        title: Notice.getTitleByMessageType(type),
+        type,
+        message: msg,
+        showConfirmButton,
+        showCancelButton,
+        closeOnClickModal,
+        closeOnPressEscape,
+        confirmButtonText,
+        cancelButtonText,
+      }).then((res) => {
+        resolve(res);
+      }).catch(() => {
+        reject();
+      });
     });
+  }
+
+  /**
+   * 关闭消息提示框
+   */
+  static hideMessageBox() {
+    MessageBox.close();
   }
 
   /**

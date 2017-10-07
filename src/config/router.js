@@ -15,16 +15,19 @@ export default {
     {
       path: '/',
       name: 'Dashboard',
+      meta: { title: '首页' },
       component: Dashboard,
       children: [
         {
           path: '/entity/search/:id',
           name: 'EntitySearch',
+          meta: { title: '查询' },
           component: EntitySearch,
         },
         {
           path: '/entity/create/:id',
           name: 'EntityCreate',
+          meta: { title: '新增' },
           component: EntityCreate,
         },
       ],
