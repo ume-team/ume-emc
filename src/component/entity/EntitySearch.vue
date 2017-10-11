@@ -16,6 +16,7 @@
     <ume-entity-table :entity-id="entityId"
       :desc="entityDesc"
       :data="entityData"
+      :constraint="entityConstraint"
       @update="doUpdate">
     </ume-entity-table>
     <div class="search-result-pagination">
@@ -114,15 +115,17 @@ export default {
     doFetch() {
       const entityId = this.$route.params.id;
       const getEmDesc = EntityResource.getEmDesc(entityId);
-      const getEmDataList = EntityResource.getEmDataList(entityId,
+      const getEmConstraints = EntityResource.getEmConstraints(entityId);
+      const getEmDataList = EntityResource.getEmDataWithConstraintsList(entityId,
         this.searchCondition);
       const getEmDataCount = EntityResource.getEmDataCount(entityId,
         this.searchCondition);
-      Promise.all([getEmDesc, getEmDataList, getEmDataCount])
+      Promise.all([getEmDesc, getEmConstraints, getEmDataList, getEmDataCount])
         .then((res) => {
           this.entityDesc = res[0];
-          this.entityData = res[1];
-          this.totalCount = res[2];
+          this.entityConstraint = res[1];
+          this.entityData = res[2];
+          this.totalCount = res[3];
         });
     },
     doSearch() {

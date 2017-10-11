@@ -134,7 +134,6 @@ function toJsonSchema(desc, constraints = []) {
       };
     }
   });
-  console.log(schema);
   return {
     schema,
     uiSchema,
@@ -171,6 +170,43 @@ export default class EntityResource {
       delete jsonInput.theSQLCondition;
     }
     return UmeHttp.invoke('EMS20001', ['Retrieve', entityId, jsonInput]);
+  }
+
+  /**
+   * 取得指定Entity的数据（与制约的值合并）
+   * 如果Entity项目存在制约的场合，Entity的值变为对象{ label: '显示值', value: '存储值' }
+   * @static
+   * @param {any} entityId
+   * @param {any} condition
+   * @returns
+   * @memberof EntityResource
+   */
+  static getEmDataWithConstraintsList(entityId, condition) {
+    return new Promise((resolve) => {
+      const getEmDataListPromise = this.getEmDataList(entityId, condition);
+      const getEmConstraintsPromise = this.getEmConstraints(entityId);
+      Promise.all([getEmDataListPromise, getEmConstraintsPromise])
+        .then((res) => {
+          const emDataList = res[0];
+          const emConstraints = res[1];
+          resolve(emDataList.map((entity) => {
+            const ret = entity;
+            Object.keys(entity).forEach((entityItemKey) => {
+              const constraintsList = emConstraints[entityItemKey];
+              if (!util.isEmpty(constraintsList)) {
+                const obj = constraintsList.find(item => item.storeValue === `${entity[entityItemKey]}`);
+                if (obj) {
+                  ret[entityItemKey] = {
+                    value: entity[entityItemKey],
+                    label: obj.dispValue,
+                  };
+                }
+              }
+            });
+            return ret;
+          }));
+        });
+    });
   }
 
   /**
