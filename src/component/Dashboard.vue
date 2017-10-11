@@ -5,7 +5,7 @@
         <div class="system-title-container">
           <span class="title"><img src="../assets/logo_512*512.png" class="system-logo"/>{{ appTitle }}</span>
         </div>
-        <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu"></system-menu>
+        <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu" :collapse="isCollapse"></system-menu>
       </div>
     </div>
     <div class="system-layout system-layout-content">
@@ -65,13 +65,11 @@
     height: 100vh;
     position: fixed;
     left: 0px;
-    flex: 0 0 200px;
-    max-width: 200px;
-    min-width: 200px;
-    width: 200px;
+    flex: 0 0 220px;
+    width: 220px;
   }
   .system-layout-content {
-    margin-left: 200px;
+    margin-left: 220px;
     overflow-x: hidden;
     height: 100vh;
   }
@@ -135,6 +133,14 @@
   export default {
     // 组件名称
     name: 'Dashboard',
+    /**
+     * 数据对象
+     */
+    data() {
+      return {
+        isCollapse: true,
+      };
+    },
     /**
      * 计算属性
      * @type {Object}

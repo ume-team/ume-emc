@@ -1,5 +1,5 @@
 <template>
-  <el-menu default-active="2" theme="dark" :router="true" :default-active="activeMenu">
+  <el-menu default-active="2" theme="dark" :router="true" :default-active="activeMenu" :collapse="collapse">
     <system-menu-item v-for="menuItem in menuData" :key="menuItem.resIndex" :menuItemData="menuItem"></system-menu-item>
   </el-menu>
 </template>
@@ -17,6 +17,7 @@ export default {
   props: {
     data: Array,
     activeMenu: String,
+    collapse: Boolean,
   },
   computed: {
     menuData() {

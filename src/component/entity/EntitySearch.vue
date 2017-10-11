@@ -55,126 +55,126 @@
   }
 </style>
 <script>
-import { Message } from 'setaria';
-import { Notice } from '@/component/ui';
-import EntityResource from '@/model/resource/EntityResource';
-import BizUtil from '@/model/BizUtil';
-import UmeEntityTable from './UmeEntityTable';
-import EntityUpdate from './EntityUpdate';
+  import { Message } from 'setaria';
+  import { Notice } from '@/component/ui';
+  import EntityResource from '@/model/resource/EntityResource';
+  import BizUtil from '@/model/BizUtil';
+  import UmeEntityTable from './UmeEntityTable';
+  import EntityUpdate from './EntityUpdate';
 
-export default {
-  data() {
-    return {
-      collapseValue: 'search',
-      entityId: '',
-      entityDesc: {},
-      entityConstraint: {},
-      entityData: [],
-      searchCondition: {
-        theSQLCondition: '',
-        theFetchStart: 0,
-        theFetchSize: 10,
-      },
-      entitySearchFormSchema: {
-        properties: {
-          theSQLCondition: {
-            type: 'string',
-            title: '搜索条件',
+  export default {
+    data() {
+      return {
+        collapseValue: 'search',
+        entityId: '',
+        entityDesc: {},
+        entityConstraint: {},
+        entityData: [],
+        searchCondition: {
+          theSQLCondition: '',
+          theFetchStart: 0,
+          theFetchSize: 10,
+        },
+        entitySearchFormSchema: {
+          properties: {
+            theSQLCondition: {
+              type: 'string',
+              title: '搜索条件',
+            },
           },
         },
-      },
-      entitySearchFormUiSchema: {
-        theSQLCondition: {
-          'ui:widget': 'textarea',
+        entitySearchFormUiSchema: {
+          theSQLCondition: {
+            'ui:widget': 'textarea',
+          },
+        },
+        currentPage: 1,
+        pageSize: parseInt(BizUtil.getConfigValue('TABLE_PAGE_SIZE'), 10),
+        totalCount: 0,
+        isShowUpdateForm: false,
+        selectedEntityPrimaryKeys: null,
+      };
+    },
+    created() {
+      this.entityId = this.$route.params.id;
+      this.doFetch();
+    },
+    watch: {
+      $route: 'doFetch',
+      currentPage: {
+        immediate: true,
+        handler(val) {
+          this.searchCondition.theFetchStart = (val - 1) * this.pageSize;
         },
       },
-      currentPage: 1,
-      pageSize: parseInt(BizUtil.getConfigValue('TABLE_PAGE_SIZE'), 10),
-      totalCount: 0,
-      isShowUpdateForm: false,
-      selectedEntityPrimaryKeys: null,
-    };
-  },
-  created() {
-    this.entityId = this.$route.params.id;
-    this.doFetch();
-  },
-  watch: {
-    $route: 'doFetch',
-    currentPage: {
-      immediate: true,
-      handler(val) {
-        this.searchCondition.theFetchStart = (val - 1) * this.pageSize;
+      pageSize: {
+        immediate: true,
+        handler(val) {
+          this.searchCondition.theFetchSize = val;
+        },
       },
     },
-    pageSize: {
-      immediate: true,
-      handler(val) {
-        this.searchCondition.theFetchSize = val;
+    methods: {
+      doFetch() {
+        const entityId = this.$route.params.id;
+        const getEmDesc = EntityResource.getEmDesc(entityId);
+        const getEmConstraints = EntityResource.getEmConstraints(entityId);
+        const getEmDataList = EntityResource.getEmDataWithConstraintsList(entityId,
+          this.searchCondition);
+        const getEmDataCount = EntityResource.getEmDataCount(entityId,
+          this.searchCondition);
+        Promise.all([getEmDesc, getEmConstraints, getEmDataList, getEmDataCount])
+          .then((res) => {
+            this.entityDesc = res[0];
+            this.entityConstraint = res[1];
+            this.entityData = res[2];
+            this.totalCount = res[3];
+          });
+      },
+      doSearch() {
+        this.currentPage = 1;
+        this.doFetch();
+      },
+      doResultListCurrentChange(val) {
+        this.currentPage = val;
+        this.doFetch();
+      },
+      doResultListSizeChange(val) {
+        this.pageSize = val;
+        this.doFetch();
+      },
+      doUpdate(val) {
+        const entityId = this.$route.params.id;
+        EntityResource.getEmPrimaryObj(entityId, val)
+          .then((res) => {
+            this.selectedEntityPrimaryKeys = res;
+            this.isShowUpdateForm = true;
+          });
+      },
+      doUpdateSuccessful() {
+        this.isShowUpdateForm = false;
+        this.doFetch();
+      },
+      doCancelUpdate() {
+        this.isShowUpdateForm = false;
+      },
+      doDelete(val) {
+        Notice.showMessageBox(new Message('MBM002I'))
+          .then(() => {
+            const entityId = this.$route.params.id;
+            EntityResource.deleteEmData(entityId, val)
+              .then(() => {
+                Notice.showMessage(new Message('MBM001I', ['', '删除']));
+                this.doFetch();
+              });
+          })
+          .catch(() => {
+          });
       },
     },
-  },
-  methods: {
-    doFetch() {
-      const entityId = this.$route.params.id;
-      const getEmDesc = EntityResource.getEmDesc(entityId);
-      const getEmConstraints = EntityResource.getEmConstraints(entityId);
-      const getEmDataList = EntityResource.getEmDataWithConstraintsList(entityId,
-        this.searchCondition);
-      const getEmDataCount = EntityResource.getEmDataCount(entityId,
-        this.searchCondition);
-      Promise.all([getEmDesc, getEmConstraints, getEmDataList, getEmDataCount])
-        .then((res) => {
-          this.entityDesc = res[0];
-          this.entityConstraint = res[1];
-          this.entityData = res[2];
-          this.totalCount = res[3];
-        });
+    components: {
+      UmeEntityTable,
+      EntityUpdate,
     },
-    doSearch() {
-      this.currentPage = 1;
-      this.doFetch();
-    },
-    doResultListCurrentChange(val) {
-      this.currentPage = val;
-      this.doFetch();
-    },
-    doResultListSizeChange(val) {
-      this.pageSize = val;
-      this.doFetch();
-    },
-    doUpdate(val) {
-      const entityId = this.$route.params.id;
-      EntityResource.getEmPrimaryObj(entityId, val)
-        .then((res) => {
-          this.selectedEntityPrimaryKeys = res;
-          this.isShowUpdateForm = true;
-        });
-    },
-    doUpdateSuccessful() {
-      this.isShowUpdateForm = false;
-      this.doFetch();
-    },
-    doCancelUpdate() {
-      this.isShowUpdateForm = false;
-    },
-    doDelete(val) {
-      Notice.showMessageBox(new Message('MBM002I'))
-        .then(() => {
-          const entityId = this.$route.params.id;
-          EntityResource.deleteEmData(entityId, val)
-            .then(() => {
-              Notice.showMessage(new Message('MBM001I', ['', '删除']));
-              this.doFetch();
-            });
-        })
-        .catch(() => {
-        });
-    },
-  },
-  components: {
-    UmeEntityTable,
-    EntityUpdate,
-  },
-};
+  };
 </script>
