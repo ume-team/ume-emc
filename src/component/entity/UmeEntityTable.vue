@@ -9,12 +9,12 @@
         show-overflow-tooltip
         :render-header="renderHeader">
       </ume-table-column>
-      <ume-table-column fixed="right" label="操作" :width="controlColumnWidth">
+      <ume-table-column fixed="right" label="操作" width="140px">
         <template scope="scope">
           <div class="control-button-container">
-            <ume-button type="text" @click="doUpdate(scope.row)">修改</ume-button>
-            <span class="button-separator">|</span>
-            <ume-button type="text">删除</ume-button>
+            <ume-button type="text" @click="doUpdate(scope.row)" v-if="isShowUpdateButton">修改</ume-button>
+            <span class="button-separator" v-if="isShowUpdateButton && isShowDeleteButton">|</span>
+            <ume-button type="text" v-if="isShowDeleteButton">删除</ume-button>
           </div>
         </template>
       </ume-table-column>
@@ -43,6 +43,8 @@
   }
 </style>
 <script>
+  import AuthResource from '@/model/resource/AuthResource';
+
   const DEAULT_MIN_WIDTH = 120;
 
   function createTableHeader({ colCfgMap = {}, hideColSet = [],
@@ -68,9 +70,9 @@
         type: Array,
         required: true,
       },
-      accLevel: {
-        type: Number,
-        default: 1,
+      entityId: {
+        type: String,
+        required: true,
       },
     },
     data() {
@@ -81,18 +83,14 @@
       header() {
         return createTableHeader(this.desc);
       },
-      isShowUpdate() {
-        return this.accLevel >= 2;
+      isShowUpdateButton() {
+        return AuthResource.isCanUpdate(this.entityId);
       },
-      isShowDelete() {
-        return this.accLevel >= 4;
-      },
-      isShowDetail() {
-        return this.accLevel >= 1;
+      isShowDeleteButton() {
+        return AuthResource.isCanDelete(this.entityId);
       },
       controlColumnWidth() {
-        const width = this.accLevel * 35;
-        return `${width}`;
+        return '30px';
       },
     },
     methods: {

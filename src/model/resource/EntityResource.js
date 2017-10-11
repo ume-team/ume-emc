@@ -226,7 +226,7 @@ export default class EntityResource {
    * @memberof EntityResource
    */
   static createEmData(entityId, entityObj) {
-    return UmeHttp.invoke('EMS20001', ['Create', entityId, entityObj]);
+    return UmeHttp.invoke('EMS20002', ['Create', entityId, entityObj]);
   }
 
   /**
@@ -237,7 +237,7 @@ export default class EntityResource {
    * @memberof EntityResource
    */
   static updateEmData(entityId, entityObj) {
-    return UmeHttp.invoke('EMS20001', ['Update', entityId, entityObj]);
+    return UmeHttp.invoke('EMS20002', ['Update', entityId, entityObj]);
   }
 
   /**

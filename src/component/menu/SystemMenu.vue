@@ -7,6 +7,7 @@
 <script>
 import { util } from 'setaria';
 import SystemMenuItem from '@/component/menu/SystemMenuItem';
+import AuthResource from '@/model/resource/AuthResource';
 
 const ENTITY_ADD_PREFIX = '新增';
 const ENTITY_SEARCH_PREFIX = '查询';
@@ -26,17 +27,17 @@ export default {
     createEntityMenuItem(entity) {
       const children = [];
       const resIndex = entity.resIndex;
-      if (entity.accLevel > 0) {
+      if (AuthResource.isCanSearch(entity.resId)) {
         children.push({
           name: `${ENTITY_SEARCH_PREFIX}${entity.resName}`,
           index: `/entity/search/${entity.resId}`,
         });
-        if (entity.accLevel === 4) {
-          children.push({
-            name: `${ENTITY_ADD_PREFIX}${entity.resName}`,
-            index: `/entity/create/${entity.resId}`,
-          });
-        }
+      }
+      if (AuthResource.isCanCreate(entity.resId)) {
+        children.push({
+          name: `${ENTITY_ADD_PREFIX}${entity.resName}`,
+          index: `/entity/create/${entity.resId}`,
+        });
       }
       return {
         name: entity.resName,

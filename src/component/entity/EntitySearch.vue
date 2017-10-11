@@ -13,7 +13,10 @@
         </ume-dynamic-form>
       </ume-collapse-item>
     </ume-collapse>
-    <ume-entity-table :desc="entityDesc" :data="entityData" :accLevel="4" @update="doUpdate">
+    <ume-entity-table :entity-id="entityId"
+      :desc="entityDesc"
+      :data="entityData"
+      @update="doUpdate">
     </ume-entity-table>
     <div class="search-result-pagination">
       <ume-pagination
@@ -59,6 +62,7 @@ export default {
   data() {
     return {
       collapseValue: 'search',
+      entityId: '',
       entityDesc: {},
       entityConstraint: {},
       entityData: [],
@@ -88,6 +92,7 @@ export default {
     };
   },
   created() {
+    this.entityId = this.$route.params.id;
     this.doFetch();
   },
   watch: {

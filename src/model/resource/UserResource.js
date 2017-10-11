@@ -32,6 +32,12 @@ export default class User {
     return UmeHttp.invoke('EMS00002', [userId]);
   }
 
+  /**
+   * 取得当前用户信息
+   * @static
+   * @returns
+   * @memberof User
+   */
   static getUser() {
     return Setaria.plugin.store.state.common.user;
   }
