@@ -18,7 +18,7 @@
           <div class="control-button-container">
             <ume-button type="text" @click="doUpdate(scope.row)" v-if="isShowUpdateButton">修改</ume-button>
             <span class="button-separator" v-if="isShowUpdateButton && isShowDeleteButton">|</span>
-            <ume-button type="text" v-if="isShowDeleteButton">删除</ume-button>
+            <ume-button type="text" @click="doDelete(scope.row)" v-if="isShowDeleteButton">删除</ume-button>
           </div>
         </template>
       </ume-table-column>
@@ -123,8 +123,19 @@
           },
         );
       },
+      /**
+       * 修改按钮点击事件处理
+       * @event
+       */
       doUpdate(row) {
         this.$emit('update', row);
+      },
+      /**
+       * 删除按钮点击事件处理
+       * @event
+       */
+      doDelete(row) {
+        this.$emit('delete', row);
       },
       /**
        * 取得当前列的对齐方式

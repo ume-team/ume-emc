@@ -84,8 +84,8 @@ class Notice {
         cancelButtonText,
       }).then((res) => {
         resolve(res);
-      }).catch(() => {
-        reject();
+      }).catch((error) => {
+        reject(error);
       });
     });
   }

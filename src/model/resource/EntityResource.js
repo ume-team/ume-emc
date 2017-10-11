@@ -277,6 +277,25 @@ export default class EntityResource {
   }
 
   /**
+   * 删除实体数据
+   * @static
+   * @param {any} entityId
+   * @param {any} entityObj
+   * @memberof EntityResource
+   */
+  static deleteEmData(entityId, entityObj) {
+    return new Promise((resolve) => {
+      this.getEmPrimaryObj(entityId, entityObj)
+        .then((primaryObj) => {
+          UmeHttp.invoke('EMS20002', ['Delete', entityId, primaryObj])
+            .then(() => {
+              resolve();
+            });
+        });
+    });
+  }
+
+  /**
    * 取得主键数据
    * @static
    * @param {any} entityId

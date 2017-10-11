@@ -17,7 +17,8 @@
       :desc="entityDesc"
       :data="entityData"
       :constraint="entityConstraint"
-      @update="doUpdate">
+      @update="doUpdate"
+      @delete="doDelete">
     </ume-entity-table>
     <div class="search-result-pagination">
       <ume-pagination
@@ -54,6 +55,8 @@
   }
 </style>
 <script>
+import { Message } from 'setaria';
+import { Notice } from '@/component/ui';
 import EntityResource from '@/model/resource/EntityResource';
 import BizUtil from '@/model/BizUtil';
 import UmeEntityTable from './UmeEntityTable';
@@ -154,6 +157,19 @@ export default {
     },
     doCancelUpdate() {
       this.isShowUpdateForm = false;
+    },
+    doDelete(val) {
+      Notice.showMessageBox(new Message('MBM002I'))
+        .then(() => {
+          const entityId = this.$route.params.id;
+          EntityResource.deleteEmData(entityId, val)
+            .then(() => {
+              Notice.showMessage(new Message('MBM001I', ['', '删除']));
+              this.doFetch();
+            });
+        })
+        .catch(() => {
+        });
     },
   },
   components: {
