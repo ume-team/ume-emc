@@ -1,14 +1,28 @@
 <template>
   <div class="system-layout system-layout-has-sider">
-    <div class="system-layout-sider">
+    <div class="system-layout-sider" :style="{overflowY: navMenuOverflow, flex: `0 0 ${navMenuWidth}`}">
       <div class="system-layout-sider-children">
         <div class="system-title-container">
-          <span class="title"><img src="../assets/logo_512*512.png" class="system-logo"/>{{ appTitle }}</span>
+          <span class="title">
+            <img src="../assets/logo_512*512.png" class="system-logo"/>
+            <template v-if="!isCollapse">{{ appTitle }}</template>
+          </span>
         </div>
-        <system-menu class="nav-menu" :data="accResList" :activeMenu="activeMenu" :collapse="isCollapse"></system-menu>
+        <div class="nav-menu-collapse" @click="doToggleMenuCollapse">
+          <i class="fa fa-angle-double-right" aria-hidden="true" v-if="isCollapse"></i>
+          <i class="fa fa-angle-double-left" aria-hidden="true" v-else></i>
+        </div>
+        <system-menu :style="{width: navMenuWidth}"
+          ref="systemMenu"
+          class="nav-menu"
+          :data="accResList"
+          :activeMenu="activeMenu"
+          :collapse="isCollapse"
+          @select="doSelect">
+        </system-menu>
       </div>
     </div>
-    <div class="system-layout system-layout-content">
+    <div class="system-layout system-layout-content" :style="{marginLeft: navMenuWidth}">
       <div class="system-layout-header">
         <span class="nav-container">
           <span class="nav-item">
@@ -61,15 +75,12 @@
     position: relative;
     background: #324157;
     min-width: 0;
-    overflow: auto;
     height: 100vh;
     position: fixed;
     left: 0px;
-    flex: 0 0 220px;
-    width: 220px;
+    z-index: 100;
   }
   .system-layout-content {
-    margin-left: 220px;
     overflow-x: hidden;
     height: 100vh;
   }
@@ -124,11 +135,24 @@
   .system-bread-crumb {
     margin-bottom: 10px;
   }
+  .nav-menu-collapse {
+    text-align: center;
+    color: #bfcbd9;
+    font-size: 18px;
+    background: #384558;
+  }
+  .nav-menu-collapse:hover {
+    cursor: pointer;
+    color: #e7f1fd;
+  }
 </style>
 <script>
   import SystemMenu from '@/component/menu/SystemMenu';
   import BizUtil from '@/model/BizUtil';
   import UserResource from '@/model/resource/UserResource';
+
+  const ENTITY_NAME = 'Entity';
+  const LINK_NAME = 'ExternalLink';
 
   export default {
     // 组件名称
@@ -138,7 +162,8 @@
      */
     data() {
       return {
-        isCollapse: true,
+        isCollapse: false,
+        activeMenu: '',
       };
     },
     /**
@@ -168,13 +193,6 @@
         return UserResource.getUser().accResList;
       },
       /**
-       * 当前使用的菜单项
-       * @return {String}
-       */
-      activeMenu() {
-        return this.$router.currentRoute.path;
-      },
-      /**
        * 面包屑
        * @return {Array}
        */
@@ -186,6 +204,20 @@
           }
           return ret;
         });
+      },
+      navMenuWidth() {
+        return this.isCollapse ? '65px' : '220px';
+      },
+      navMenuOverflow() {
+        return this.isCollapse ? 'unset' : 'auto';
+      },
+    },
+    watch: {
+      $route: {
+        immediate: true,
+        handler(val) {
+          this.activeMenu = this.getActiveMenu(val);
+        },
       },
     },
     /**
@@ -206,10 +238,62 @@
         });
       },
       /**
+       * 收起／展开菜单按钮点击事件处理
+       * @event
+       */
+      doToggleMenuCollapse() {
+        this.isCollapse = !this.isCollapse;
+        if (!this.isCollapse) {
+          setTimeout(() => {
+            this.activeMenu = '';
+            this.$nextTick(() => {
+              this.activeMenu = this.getActiveMenu(this.$router.currentRoute);
+            });
+          }, 500);
+        }
+      },
+      /**
+       * 菜单项目选中事件处理
+       * @event
+       */
+      doSelect(index) {
+        // 选择实体页面菜单项目的场合
+        if (this.getMenuItemType(index) === ENTITY_NAME) {
+          const indexArr = index.split('/');
+          this.$router.forwardTo(indexArr[0], {
+            id: indexArr[1],
+          });
+        // 选择外部链接菜单项目的场合
+        } else if (this.getMenuItemType(index) === LINK_NAME) {
+          this.$router.forwardTo('ExternalLink', {
+            link: index,
+          });
+        }
+      },
+      getMenuItemType(index) {
+        if (index.indexOf(ENTITY_NAME) === 0) {
+          return ENTITY_NAME;
+        } else if (index.indexOf('http') === 0) {
+          return LINK_NAME;
+        }
+        return '';
+      },
+      /**
        * 跳转至登录页面
        */
       forwardToLogin() {
         this.$router.forwardTo('Login');
+      },
+      /**
+       * 从当前路由对象中取得对应的菜单项目index值
+       */
+      getActiveMenu(val) {
+        if (val.name.indexOf(ENTITY_NAME) === 0) {
+          return `${val.name}/${val.params.id}`;
+        } else if (val.name.indexOf(LINK_NAME) === 0) {
+          return `${val.params.link}`;
+        }
+        return '';
       },
     },
     /**

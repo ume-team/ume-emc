@@ -11,6 +11,7 @@
     "generate": "node build/generate/run.js"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "setaria": "^0.0.9",
     "setaria-ui": "^1.0.x",
     "vue": "^2.3.3"

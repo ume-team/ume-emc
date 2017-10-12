@@ -1,6 +1,11 @@
 <template>
-  <el-menu default-active="2" theme="dark" :router="true" :default-active="activeMenu" :collapse="collapse">
-    <system-menu-item v-for="menuItem in menuData" :key="menuItem.resIndex" :menuItemData="menuItem"></system-menu-item>
+  <el-menu default-active="2" theme="dark" @select="doSelect"
+    :default-active="activeMenu" :collapse="collapse">
+    <system-menu-item v-for="menuItem in menuData"
+      :key="menuItem.resIndex"
+      :menuItemData="menuItem"
+      :collapse="collapse">
+    </system-menu-item>
   </el-menu>
 </template>
 
@@ -25,24 +30,35 @@ export default {
     },
   },
   methods: {
+    /**
+     * 菜单项选中事件处理
+     * @event
+     */
+    doSelect(index, indexPath) {
+      this.$emit('select', index, indexPath);
+    },
+    /**
+     * 创建菜单子项目
+     */
     createEntityMenuItem(entity) {
       const children = [];
       const resIndex = entity.resIndex;
       if (AuthResource.isCanSearch(entity.resId)) {
         children.push({
           name: `${ENTITY_SEARCH_PREFIX}${entity.resName}`,
-          index: `/entity/search/${entity.resId}`,
+          // index: `/entity/search/${entity.resId}`,
+          index: `EntitySearch/${entity.resId}`,
         });
       }
       if (AuthResource.isCanCreate(entity.resId)) {
         children.push({
           name: `${ENTITY_ADD_PREFIX}${entity.resName}`,
-          index: `/entity/create/${entity.resId}`,
+          index: `EntityCreate/${entity.resId}`,
         });
       }
       return {
         name: entity.resName,
-        index: `entity-${entity.resName}`,
+        index: entity.resId,
         resIndex,
         children,
       };
@@ -68,7 +84,7 @@ export default {
               resGroup,
               resIndex,
               name: resGroup,
-              index: `parent-${resGroup}`,
+              index: resGroup,
               children: [],
             });
           }
@@ -82,9 +98,19 @@ export default {
         // 如果是resGroup菜单的场合
         if (!util.isEmpty(menuItem.resGroup)) {
           sysUserAclList.forEach((sysUserAclItem) => {
-            // 添加Entity菜单项
+            // 添加菜单子项目
             if (util.isEqual(sysUserAclItem.resGroup, menuItem.resGroup)) {
-              menuItem.children.push(this.createEntityMenuItem(sysUserAclItem));
+              // 添加Entity菜单项
+              if (sysUserAclItem.resType === 1 || sysUserAclItem.resType === 90) {
+                menuItem.children.push(this.createEntityMenuItem(sysUserAclItem));
+              // 添加类别为外部链接的菜单项
+              } else if (sysUserAclItem.resType === 91) {
+                menuItem.children.push({
+                  name: sysUserAclItem.resName,
+                  index: sysUserAclItem.resLink,
+                  type: 'link',
+                });
+              }
             }
           });
           // 使用resIndex进行升序排列
@@ -93,7 +119,6 @@ export default {
           }
         }
       });
-
       return menuList;
     },
   },
