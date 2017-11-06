@@ -1,44 +1,33 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path');
 var devEnvObj = require('./dev.env');
+var prodEnvObj = require('./prod.env');
 
-var prodId = '';
+var contextPath = '';
 var argv = process.argv;
 if (argv !== undefined && argv.length > 2) {
-  prodId = argv[2];
+  contextPath = argv[2];
+} else if (prodEnvObj.CONTEXT_PATH !== undefined) {
+  contextPath = prodEnvObj.CONTEXT_PATH;
+} else {
+  contextPath = 'ume-emc';
 }
-switch (prodId) {
-  case 'ems':
-    prodEnvObj = require('./prod.ems.env');
-    break;
-  default:
-    prodEnvObj = require('./prod.env');
-}
+contextPath = '/' + contextPath + '/';
 
 function getEnvConfig(key) {
   var env = process.env.NODE_ENV === 'production' ? prodEnvObj : devEnvObj;
   return env[key].replace(/"/g, '');
 }
 
-function getOutputFolder() {
-  if (prodEnvObj.OUTPUT_FOLDER) {
-    var outputFolder = prodEnvObj.OUTPUT_FOLDER;
-    if (outputFolder.charAt(outputFolder.length - 1) === '/') {
-      outputFolder = outputFolder.substring(0, outputFolder.length - 1);
-    }
-    return '../' + outputFolder.replace(/"/g, '');
-  } else {
-    return '../dist';
-  }
-}
+var outputFolder = '../../../../target/dist';
 
 var config = {
   build: {
     env: prodEnvObj,
-    index: path.resolve(__dirname, getOutputFolder() + '/index.html'),
-    assetsRoot: path.resolve(__dirname, getOutputFolder()),
-    assetsSubDirectory: 'client-static',
-    assetsPublicPath: prodEnvObj.CONTEXT_PATH.replace(/"/g, ''),
+    index: path.resolve(__dirname, outputFolder + '/index.html'),
+    assetsRoot: path.resolve(__dirname, outputFolder),
+    assetsSubDirectory: 'web-static-resource',
+    assetsPublicPath: contextPath.replace(/"/g, ''),
     productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
