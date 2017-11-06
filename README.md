@@ -54,12 +54,15 @@ yarn run dev
 通过命令行工具进入ume-emc目录，执行mvn clean package。
 
 ``` bash
-// 确认部署时的Context-Path，默认为ume-emc
-// 希望修改的场合，可修改ume-emc/pom.xml中的web.context.path
-// 通过命令行工具进入ume-emc目录
-mvn clean package
-// 如果出现"BUILD SUCCESS"字样则代表构建成功
-// 构建好的文件生成在 ume-emc/target/dist目录中
+1. 定义Context-Path
+  # Context-Path默认为ume-emc
+  希望修改的场合，可修改ume-emc/pom.xml中的web.context.path
+2. 构建  
+  # 通过命令行工具进入ume-emc目录
+  mvn clean package
+  # 如果出现"BUILD SUCCESS"字样则代表构建成功
+3. 取得构建后的文件
+  构建好的文件生成在 ume-emc/target/dist目录中
 ```
 
 ## 开发手册
