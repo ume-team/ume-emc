@@ -4,8 +4,13 @@
 
 ## 开发所需软件
 
-1. NodeJS
-> 用于安装项目所需的第三方依赖包和在本地进行前端的开发与调试。
+1. Git
+> 版本管理工具。用于下载项目的代码和在开发时进行代码和文档的版本管理。
+
+  [安装说明](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)
+  
+2. NodeJS
+> 前端项目运行的基础环境。
 
   [安装包下载地址](https://nodejs.org/zh-cn/download/)
   [安装说明](http://www.runoob.com/nodejs/nodejs-install-setup.html)
@@ -17,19 +22,19 @@ npm config set registry https://registry.npm.taobao.org
 npm config get registry
 ```
 
-2. Git
-> 版本管理工具。用于下载项目的代码和在开发时进行代码和文档的版本管理。
+3. Yarn
+> 用于管理第三方依赖
 
-  [安装说明](https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git)
+  [安装包下载地址](https://yarnpkg.com/lang/zh-hans/docs/install/)
 
 ## 安装步骤
 ``` bash
 # 下载工程到本地
-git clone https://github.com/ume-team/ume.js.git
+git clone https://github.com/ume-team/ume-emc.git
 # 进入工程目录
-cd ume.js
+cd ume-emc/src/main/webclient-source
 # 安装项目依赖
-npm install
+yarn
 ```
 
 ## 本地开发
@@ -42,17 +47,23 @@ npm install
 TARGET_WEBSERVICE_SERVER: '"http://www.myservice.com/api"'
 
 # 启动服务器
-npm run dev
+yarn run dev
 ```
 
 ## 部署生产
+通过命令行工具进入ume-emc目录，执行mvn clean package。
+
 ``` bash
-// 执行构建命令，在dist文件夹内生成合并和压缩后的代码
-npm run build
+// 确认部署时的Context-Path，默认为ume-emc
+// 希望修改的场合，可修改ume-emc/pom.xml中的web.context.path
+// 通过命令行工具进入ume-emc目录
+mvn clean package
+// 如果出现"BUILD SUCCESS"字样则代表构建成功
+// 构建好的文件生成在 ume-emc/target/dist目录中
 ```
 
 ## 开发手册
-[开发手册](https://github.com/bluejfox/ume.js/blob/master/doc/GUIDE.md)
+[开发手册](https://github.com/ume-team/ume-emc/blob/master/doc/GUIDE.md)
 
 ## 浏览器支持
 支持各种主流浏览器(Chrome, Firefox, Safari)和Internet Explorer 9+.
