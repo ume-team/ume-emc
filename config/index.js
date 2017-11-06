@@ -1,21 +1,45 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path');
 var devEnvObj = require('./dev.env');
-var prodEnvObj = require('./prod.env');
 
-function getEnvConfig (key) {
+var prodId = '';
+var argv = process.argv;
+if (argv !== undefined && argv.length > 2) {
+  prodId = argv[2];
+}
+switch (prodId) {
+  case 'ems':
+    prodEnvObj = require('./prod.ems.env');
+    break;
+  default:
+    prodEnvObj = require('./prod.env');
+}
+
+function getEnvConfig(key) {
   var env = process.env.NODE_ENV === 'production' ? prodEnvObj : devEnvObj;
   return env[key].replace(/"/g, '');
+}
+
+function getOutputFolder() {
+  if (prodEnvObj.OUTPUT_FOLDER) {
+    var outputFolder = prodEnvObj.OUTPUT_FOLDER;
+    if (outputFolder.charAt(outputFolder.length - 1) === '/') {
+      outputFolder = outputFolder.substring(0, outputFolder.length - 1);
+    }
+    return '../' + outputFolder.replace(/"/g, '');
+  } else {
+    return '../dist';
+  }
 }
 
 var config = {
   build: {
     env: prodEnvObj,
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    productionSourceMap: true,
+    index: path.resolve(__dirname, getOutputFolder() + '/index.html'),
+    assetsRoot: path.resolve(__dirname, getOutputFolder()),
+    assetsSubDirectory: 'client-static',
+    assetsPublicPath: prodEnvObj.CONTEXT_PATH.replace(/"/g, ''),
+    productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -46,12 +70,14 @@ var config = {
 }
 
 // only use in dev
-var proxyKey = getEnvConfig('PROXY_KEY');
-var pathRegex = '^' + proxyKey;
-config.dev.proxyTable[proxyKey] = {
-  target: getEnvConfig('TARGET_WEBSERVICE_SERVER'),
-  changeOrigin: true
+if (process.env.NODE_ENV !== 'production') {
+  var proxyKey = getEnvConfig('PROXY_KEY');
+  var pathRegex = '^' + proxyKey;
+  config.dev.proxyTable[proxyKey] = {
+    target: getEnvConfig('TARGET_WEBSERVICE_SERVER'),
+    changeOrigin: true
+  }
+  config.dev.proxyTable[proxyKey].pathRewrite = {};
+  config.dev.proxyTable[proxyKey].pathRewrite[pathRegex] = '';
 }
-config.dev.proxyTable[proxyKey].pathRewrite = {};
-config.dev.proxyTable[proxyKey].pathRewrite[pathRegex] = '';
 module.exports = config;

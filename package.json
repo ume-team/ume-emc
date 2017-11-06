@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
+    "build-ems": "node build/build.js ems",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "generate": "node build/generate/run.js"
   },

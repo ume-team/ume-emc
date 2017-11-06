@@ -26,10 +26,14 @@
       <div class="system-layout-header">
         <span class="nav-container">
           <span class="nav-item">
-            {{ userName }}
-          </span>
-          <span class="nav-item">
-            <ume-button type="primary" class="login-button" @click="doLogout">注销</ume-button>
+            <ume-dropdown>
+              <span class="el-dropdown-link">
+                <i class="fa fa-user-circle-o" aria-hidden="true"></i> {{ userName }}
+              </span>
+              <ume-dropdown-menu slot="dropdown" class="user-command-option" @command="doUserCommandSelect">
+                <ume-dropdown-item command="logout">退出系统</ume-dropdown-item>
+              </ume-dropdown-menu>
+            </ume-dropdown>
           </span>
         </span>
       </div>
@@ -78,7 +82,7 @@
     height: 100vh;
     position: fixed;
     left: 0px;
-    z-index: 100;
+    z-index: 999;
   }
   .system-layout-content {
     overflow-x: hidden;
@@ -95,6 +99,13 @@
   }
   .nav-item + .nav-item {
     margin-left: 10px;
+  }
+  .nav-item .el-dropdown-link {
+    font-size: 16px;
+  }
+  .user-command-option {
+    font-size: 14px;
+    top: 60px !important;
   }
   .system-layout-footer {
     padding: 24px 50px;
@@ -226,16 +237,13 @@
      */
     methods: {
       /**
-       * 注销按钮点击事件处理
-       * @event
+       * 用户功能菜单项目点击事件处理
        */
-      doLogout() {
-        // 调用登出服务
-        UserResource.logout(UserResource.getUser().user.userId).then(() => {
-          this.forwardToLogin();
-        }).catch(() => {
-          this.forwardToLogin();
-        });
+      doUserCommandSelect(command) {
+        console.log(command);
+        if (command === 'logout') {
+          this.logout();
+        }
       },
       /**
        * 收起／展开菜单按钮点击事件处理
@@ -269,6 +277,18 @@
             link: index,
           });
         }
+      },
+      /**
+       * 注销按钮点击事件处理
+       * @event
+       */
+      logout() {
+        // 调用登出服务
+        UserResource.logout(UserResource.getUser().user.userId).then(() => {
+          this.forwardToLogin();
+        }).catch(() => {
+          this.forwardToLogin();
+        });
       },
       getMenuItemType(index) {
         if (index.indexOf(ENTITY_NAME) === 0) {
