@@ -58,9 +58,16 @@ yarn run dev
   # Context-Path默认为ume-emc
   希望修改的场合，可修改ume-emc/pom.xml中的web.context.path
 2. 构建  
-  # 通过命令行工具进入ume-emc目录
-  执行 mvn clean package
-  # 如果出现"BUILD SUCCESS"字样则代表构建成功
+  构建分为yarn和maven两种方式。
+  2.1. Yarn
+    # 通过命令行工具进入ume-emc/src/main/webclient-source目录
+    a) 执行 `yarn` 安装第三方依赖
+    b) 执行 `yarn run build` 进行打包
+    # 如果出现"BUILD SUCCESS"字样则代表构建成功
+  2.2. Maven
+    # 通过命令行工具进入ume-emc/目录
+    执行 `mvn clean package`
+    # 如果出现"BUILD SUCCESS"字样则代表构建成功
 3. 取得构建后的文件
   构建好的文件生成在 ume-emc/target/dist目录中
 ```
