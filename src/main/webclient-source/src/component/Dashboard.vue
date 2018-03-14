@@ -158,8 +158,8 @@
   }
 </style>
 <script>
+  import { config, util } from 'setaria';
   import SystemMenu from '@/component/menu/SystemMenu';
-  import BizUtil from '@/model/BizUtil';
   import UserResource from '@/model/resource/UserResource';
 
   const ENTITY_NAME = 'Entity';
@@ -187,21 +187,21 @@
        * @return {String}
        */
       appTitle() {
-        return BizUtil.getConfigValue('APP_TITLE');
+        return config.env.APP_TITLE;
       },
       /**
        * 用户名称
        * @return {String}
        */
       userName() {
-        return UserResource.getUser().user.userName;
+        return util.get(UserResource.getUser(), 'user.userName', '');
       },
       /**
        * 菜单数据
        * @return {String}
        */
       accResList() {
-        return UserResource.getUser().accResList;
+        return util.get(UserResource.getUser(), 'accResList', []);
       },
       /**
        * 面包屑
@@ -240,7 +240,6 @@
        * 用户功能菜单项目点击事件处理
        */
       doUserCommandSelect(command) {
-        console.log(command);
         if (command === 'logout') {
           this.logout();
         }

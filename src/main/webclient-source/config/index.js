@@ -48,7 +48,15 @@ var config = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     // cann't use es6 grammar, so define it in other ways
-    proxyTable: {},
+    proxyTable: {
+      '/ume-ems/rest/s01/': {
+        target: 'http://localhost:8081/ume-ems/rest/s01/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ume-ems/rest/s01/': ''
+        }
+      }
+    },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)
@@ -56,17 +64,5 @@ var config = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
   }
-}
-
-// only use in dev
-if (process.env.NODE_ENV !== 'production') {
-  var proxyKey = getEnvConfig('PROXY_KEY');
-  var pathRegex = '^' + proxyKey;
-  config.dev.proxyTable[proxyKey] = {
-    target: getEnvConfig('TARGET_WEBSERVICE_SERVER'),
-    changeOrigin: true
-  }
-  config.dev.proxyTable[proxyKey].pathRewrite = {};
-  config.dev.proxyTable[proxyKey].pathRewrite[pathRegex] = '';
 }
 module.exports = config;

@@ -1,4 +1,4 @@
-import { util } from 'setaria';
+import { store, util } from 'setaria';
 import UmeHttp from '../UmeHttp';
 
 const COL_NOT_NULL = 1;
@@ -147,7 +147,7 @@ export default class EntityResource {
    * @return {Object}
    */
   static getEmDesc(entityId) {
-    return UmeHttp.invoke('EMS10001', [entityId]);
+    return store.dispatch('entity/getDesc', entityId);
   }
 
   /**
@@ -155,8 +155,8 @@ export default class EntityResource {
    * @param  {String} entityId   Entity ID
    * @return {Object}
    */
-  static getEmConstraints(entityId) {
-    return UmeHttp.invoke('EMS10002', [entityId]);
+  static getEmConstraint(entityId) {
+    return store.dispatch('entity/getConstraint', entityId);
   }
 
   /**
@@ -184,8 +184,8 @@ export default class EntityResource {
   static getEmDataWithConstraintsList(entityId, condition) {
     return new Promise((resolve) => {
       const getEmDataListPromise = this.getEmDataList(entityId, condition);
-      const getEmConstraintsPromise = this.getEmConstraints(entityId);
-      Promise.all([getEmDataListPromise, getEmConstraintsPromise])
+      const getEmConstraintPromise = this.getEmConstraint(entityId);
+      Promise.all([getEmDataListPromise, getEmConstraintPromise])
         .then((res) => {
           const emDataList = res[0];
           const emConstraints = res[1];
@@ -232,7 +232,7 @@ export default class EntityResource {
    */
   static getEmDescSchema(entityId) {
     const emDescPromise = this.getEmDesc(entityId);
-    const emConstraintsPromise = this.getEmConstraints(entityId);
+    const emConstraintsPromise = this.getEmConstraint(entityId);
     return new Promise((resolve) => {
       Promise.all([emDescPromise, emConstraintsPromise])
       .then((res) => {

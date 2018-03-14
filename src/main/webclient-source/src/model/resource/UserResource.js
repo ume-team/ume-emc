@@ -1,4 +1,4 @@
-import Setaria, { util } from 'setaria';
+import Setaria, { storeTypes, util } from 'setaria';
 import UmeHttp from '../UmeHttp';
 
 // 用户信息
@@ -15,8 +15,8 @@ export default class User {
     return new Promise((resolve, reject) => {
       // 调用鉴权服务
       UmeHttp.invoke('EMS00001', [userId, password]).then((res) => {
-        Setaria.plugin.store.commit('common/user', res);
-        Setaria.plugin.store.commit('common/token', res.token);
+        Setaria.plugin.store.commit(storeTypes.SET_USER, res);
+        Setaria.plugin.store.commit(storeTypes.SET_TOKEN, res.token);
         resolve(res);
       }).catch((err) => {
         reject(err);
@@ -39,7 +39,7 @@ export default class User {
    * @memberof User
    */
   static getUser() {
-    return Setaria.plugin.store.state.common.user;
+    return Setaria.plugin.store.getters[storeTypes.GET_USER];
   }
 
   /**
@@ -47,6 +47,14 @@ export default class User {
    * @return {Boolean} 当前用户已经登陆的场合，返回true
    */
   static isLogin() {
-    return !util.isEmpty(Setaria.plugin.store.state.common.token);
+    return !util.isEmpty(Setaria.plugin.store.getters[storeTypes.GET_TOKEN]);
+  }
+
+  /**
+   * 清空当前用户信息
+   */
+  static clearUser() {
+    Setaria.plugin.store.commit(storeTypes.SET_USER, null);
+    Setaria.plugin.store.commit(storeTypes.SET_TOKEN, null);
   }
 }

@@ -5,7 +5,7 @@
         <img src="../assets/logo_512*512.png" class="system-logo"/>
         <span class="title">{{ appTitle }}</span>
       </div>
-      <ume-form :model="loginForm" :rules="loginFormRule" ref="loginForm" @submit="doSubmit">
+      <ume-form :model="loginForm" :rules="rules" ref="loginForm" @submit="doSubmit">
         <ume-form-item prop="loginId">
           <ume-input v-model="loginForm.loginId" placeholder="登录名" autofocus></ume-input>
         </ume-form-item>
@@ -56,9 +56,8 @@
   }
 </style>
 <script>
-  import loginFormRule from '@/model/rule/LoginFormRule';
+  import { config } from 'setaria';
   import UserResource from '@/model/resource/UserResource';
-  import BizUtil from '@/model/BizUtil';
 
   export default {
     /**
@@ -74,7 +73,14 @@
         // 前画面路由对象
         fromRouter: {},
         // 登录表单项目校验规则
-        loginFormRule,
+        rules: {
+          loginId: [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+        },
         // 登录表单对象
         loginForm: {
           loginId: '',
@@ -92,7 +98,7 @@
        * @return {String}
        */
       appTitle() {
-        return BizUtil.getConfigValue('APP_TITLE');
+        return config.env.APP_TITLE;
       },
     },
     /**

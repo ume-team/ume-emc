@@ -1,8 +1,8 @@
 <template>
   <el-submenu v-if="menuItemData.children" :index="menuItemData.index">
     <template slot="title">
-      <i class="fa fa-caret-right" aria-hidden="true" v-if="collapse"></i>
-      <span slot="title">{{ menuItemData.name }}</span>
+      <i class="el-icon-menu"></i>
+      <span>{{ menuItemData.name }}</span>
     </template>
     <el-menu-item-group :title="menuItemData.name" v-if="collapse">
       <system-menu-item

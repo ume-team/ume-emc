@@ -6,6 +6,7 @@
       :schema="schema"
       :ui-schema="uiSchema"
       label-width="180px"
+      :columns="columns"
       @submit="doSubmit">
       <div slot="button" class="form-button-container">
         <ume-button class="form-button" type="primary" native-type="submit">保存</ume-button>
@@ -34,6 +35,10 @@
     props: {
       entityId: String,
       primaryKeys: Object,
+      columns: {
+        type: Number,
+        default: 2,
+      },
     },
     data() {
       return {

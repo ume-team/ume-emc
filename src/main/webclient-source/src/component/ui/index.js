@@ -1,8 +1,9 @@
 import { util } from 'setaria';
 import SetariaUI from 'setaria-ui';
 import locale from 'setaria-ui/lib/locale/lang/zh-CN';
-import 'setaria-ui/lib/theme-default/index.css';
 import 'font-awesome/css/font-awesome.css';
+import 'setaria-ui/lib/theme-chalk/index.css';
+import './ume.css';
 import LoadingIndicator from './package/LoadingIndicator';
 import Notice from './package/Notice';
 

@@ -8,13 +8,13 @@
         :align="getColumnAlign(col)"
         show-overflow-tooltip
         :render-header="renderHeader">
-        <template scope="scope">
+        <template slot-scope="scope">
           <span v-if="typeof scope.row[col.colId] === 'object'">{{ scope.row[col.colId].label }}</span>
           <span v-else>{{ scope.row[col.colId] }}</span>
         </template>
       </ume-table-column>
       <ume-table-column fixed="right" label="操作" :width="controlColumnWidth">
-        <template scope="scope">
+        <template slot-scope="scope">
           <div class="control-button-container">
             <ume-button type="text" @click="doUpdate(scope.row)" v-if="isShowUpdateButton">修改</ume-button>
             <span class="button-separator" v-if="isShowUpdateButton && isShowDeleteButton">|</span>
@@ -31,12 +31,11 @@
   .ume-entity-table {
     width: 100%;
   }
-  .ume-entity-table th>.cell {
-    text-overflow: initial;
-    white-space: nowrap;
-  }
   .control-button-container {
     text-align: center;
+  }
+  .control-button-container .el-button {
+    padding: 0 5px;
   }
   .calc-text-width {
     position: absolute;
@@ -115,7 +114,7 @@
           col.minWidth = width;
         }
         return h(
-          'div',
+          'span',
           {
             domProps: {
               innerHTML: col.label,

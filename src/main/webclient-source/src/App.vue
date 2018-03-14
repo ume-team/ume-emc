@@ -15,14 +15,14 @@
   }
 </style>
 <script>
-  import Setaria from 'setaria';
+  import Setaria, { storeTypes, util } from 'setaria';
   import { LoadingIndicator, Notice } from '@/component/ui';
 
   export default {
     name: 'app',
     computed: {
       loadingState() {
-        return this.$store.state.common.loading;
+        return util.get(this.$store, 'getters')[storeTypes.GET_IS_LOADING];
       },
     },
     watch: {

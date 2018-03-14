@@ -1,19 +1,7 @@
 <template>
   <div>
-    <ume-collapse v-model="collapseValue" class="search-condition">
-      <ume-collapse-item title="搜索" name="search">
-        <ume-dynamic-form
-          class="entity-search-form"
-          label-width="80px"
-          :schema="entitySearchFormSchema"
-          :ui-schema="entitySearchFormUiSchema"
-          :model="searchCondition"
-          @submit="doSearch">
-          <ume-button class="search-button" type="primary" slot="button" native-type="submit">搜索</ume-button>
-        </ume-dynamic-form>
-      </ume-collapse-item>
-    </ume-collapse>
-    <ume-entity-table :entity-id="entityId"
+    <ume-entity-table
+      :entity-id="entityId"
       :desc="entityDesc"
       :data="entityData"
       :constraint="entityConstraint"
@@ -31,11 +19,16 @@
         @size-change="doResultListSizeChange">
       </ume-pagination>
     </div>
-    <ume-dialog v-model="isShowUpdateForm"
+    <ume-dialog
+      width="40%"
+      top="1vh"
+      :visible.sync="isShowUpdateForm"
       :close-on-click-modal="false"
       title="修改数据"
-      :modal-append-to-body="true">
-      <entity-update :primary-keys="selectedEntityPrimaryKeys"
+      @close="doUpdateFormClose">
+      <entity-update
+        :entity-id="selectedEntityId"
+        :primary-keys="selectedEntityPrimaryKeys"
         @submit="doUpdateSuccessful"
         @cancel="doCancelUpdate">
       </entity-update>
@@ -55,10 +48,9 @@
   }
 </style>
 <script>
-  import { Message } from 'setaria';
+  import { config, Message } from 'setaria';
   import { Notice } from '@/component/ui';
   import EntityResource from '@/model/resource/EntityResource';
-  import BizUtil from '@/model/BizUtil';
   import UmeEntityTable from './UmeEntityTable';
   import EntityUpdate from './EntityUpdate';
 
@@ -66,7 +58,6 @@
     data() {
       return {
         collapseValue: 'search',
-        entityId: '',
         entityDesc: {},
         entityConstraint: {},
         entityData: [],
@@ -75,55 +66,46 @@
           theFetchStart: 0,
           theFetchSize: 10,
         },
-        entitySearchFormSchema: {
-          properties: {
-            theSQLCondition: {
-              type: 'string',
-              title: '搜索条件',
-            },
-          },
-        },
-        entitySearchFormUiSchema: {
-          theSQLCondition: {
-            'ui:widget': 'textarea',
-          },
-        },
         currentPage: 1,
-        pageSize: parseInt(BizUtil.getConfigValue('TABLE_PAGE_SIZE'), 10),
+        pageSize: config.env.TABLE_PAGE_SIZE,
         totalCount: 0,
         isShowUpdateForm: false,
+        selectedEntityId: '',
         selectedEntityPrimaryKeys: null,
       };
     },
+    computed: {
+      entityId() {
+        return this.$route.params.id;
+      },
+    },
     created() {
-      this.entityId = this.$route.params.id;
       this.doFetch();
     },
     watch: {
       $route: 'doFetch',
       currentPage: {
-        immediate: true,
         handler(val) {
           this.searchCondition.theFetchStart = (val - 1) * this.pageSize;
+          this.doFetch();
         },
       },
       pageSize: {
-        immediate: true,
         handler(val) {
           this.searchCondition.theFetchSize = val;
+          this.doFetch();
         },
       },
     },
     methods: {
       doFetch() {
-        const entityId = this.$route.params.id;
-        const getEmDesc = EntityResource.getEmDesc(entityId);
-        const getEmConstraints = EntityResource.getEmConstraints(entityId);
-        const getEmDataList = EntityResource.getEmDataWithConstraintsList(entityId,
+        const getEmDesc = EntityResource.getEmDesc(this.entityId);
+        const getEmConstraint = EntityResource.getEmConstraint(this.entityId);
+        const getEmDataList = EntityResource.getEmDataWithConstraintsList(this.entityId,
           this.searchCondition);
-        const getEmDataCount = EntityResource.getEmDataCount(entityId,
+        const getEmDataCount = EntityResource.getEmDataCount(this.entityId,
           this.searchCondition);
-        Promise.all([getEmDesc, getEmConstraints, getEmDataList, getEmDataCount])
+        Promise.all([getEmDesc, getEmConstraint, getEmDataList, getEmDataCount])
           .then((res) => {
             this.entityDesc = res[0];
             this.entityConstraint = res[1];
@@ -136,19 +118,17 @@
         this.doFetch();
       },
       doResultListCurrentChange(val) {
-        this.currentPage = val;
-        this.doFetch();
+        this.$set(this, 'currentPage', val);
       },
       doResultListSizeChange(val) {
-        this.pageSize = val;
-        this.doFetch();
+        this.$set(this, 'pageSize', val);
       },
       doUpdate(val) {
-        const entityId = this.$route.params.id;
-        EntityResource.getEmPrimaryObj(entityId, val)
+        EntityResource.getEmPrimaryObj(this.entityId, val)
           .then((res) => {
-            this.selectedEntityPrimaryKeys = res;
-            this.isShowUpdateForm = true;
+            this.$set(this, 'selectedEntityId', this.entityId);
+            this.$set(this, 'selectedEntityPrimaryKeys', res);
+            this.$set(this, 'isShowUpdateForm', true);
           });
       },
       doUpdateSuccessful() {
@@ -161,8 +141,7 @@
       doDelete(val) {
         Notice.showMessageBox(new Message('MBM002I'))
           .then(() => {
-            const entityId = this.$route.params.id;
-            EntityResource.deleteEmData(entityId, val)
+            EntityResource.deleteEmData(this.entityId, val)
               .then(() => {
                 Notice.showMessage(new Message('MBM001I', ['', '删除']));
                 this.doFetch();
@@ -170,6 +149,10 @@
           })
           .catch(() => {
           });
+      },
+      doUpdateFormClose() {
+        this.$set(this, 'selectedEntityId', '');
+        this.$set(this, 'selectedEntityPrimaryKeys', {});
       },
     },
     components: {

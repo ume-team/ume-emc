@@ -6,6 +6,7 @@ import EntitySearch from '@/component/entity/EntitySearch';
 import ExternalLink from '@/component/ExternalLink';
 
 export default {
+  middleware: 'auth',
   routes: [
     {
       path: '/login',

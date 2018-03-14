@@ -1,34 +1,49 @@
 <template>
   <div>
-    <component :is="componentId" :entity-id="entityId" :primary-keys="primaryKeys"
-      @submit="doSubmit" @cancel="doCancel">
+    <component :is="componentId"
+      :entity-id="entityId"
+      :primary-keys="primaryKeys"
+      :columns="1"
+      @submit="doSubmit"
+      @cancel="doCancel">
     </component>
   </div>
 </template>
 <script>
-  import { Message } from 'setaria';
+  import { Message, util } from 'setaria';
   import { Notice } from '@/component/ui';
   import EntityResource from '@/model/resource/EntityResource';
   import EntityForm from './EntityForm';
 
+  const FORM_ID = 'entity-form';
+
   export default {
     props: {
+      entityId: {
+        type: String,
+        required: true,
+      },
       primaryKeys: {
         type: Object,
         required: true,
       },
     },
-    computed: {
-      entityId() {
-        return this.$route.params.id;
-      },
-    },
     data() {
       return {
-        componentId: 'entity-form',
+        componentId: FORM_ID,
       };
     },
-    created() {
+    watch: {
+      entityId: {
+        immediate: true,
+        handler(val) {
+          if (!util.isEmpty(val)) {
+            this.$set(this, 'componentId', FORM_ID);
+          } else {
+            this.$set(this, 'componentId', '');
+          }
+        },
+      },
     },
     methods: {
       doSubmit(val) {

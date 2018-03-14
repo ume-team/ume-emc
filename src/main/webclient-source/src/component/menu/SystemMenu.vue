@@ -1,6 +1,11 @@
 <template>
-  <el-menu default-active="2" theme="dark" @select="doSelect"
-    :default-active="activeMenu" :collapse="collapse">
+  <el-menu default-active="2"
+    background-color="#324157"
+    text-color="#bfcbd9"
+    active-text-color="#ffd04b"
+    @select="doSelect"
+    :default-active="activeMenu"
+    :collapse="collapse">
     <system-menu-item v-for="menuItem in menuData"
       :key="menuItem.resIndex"
       :menuItemData="menuItem"
